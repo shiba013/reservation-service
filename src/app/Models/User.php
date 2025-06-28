@@ -29,7 +29,7 @@ class User extends Authenticatable
         return $this->hasMany(Favorite::class);
     }
 
-    public function notFavorite()
+    public function wasFavorite()
     {
         return $this->hasManyThrough(Shop::class, Favorite::class, 'user_id', 'id', 'id', 'shop_id');
     }

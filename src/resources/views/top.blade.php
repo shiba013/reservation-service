@@ -10,14 +10,18 @@
         <nav class="header__nav">
             <div class="select-wrapper">
                 <select name="area" id="" class="search-form__select">
+                    @foreach($areas as $area)
                     <option value="" hidden>All area</option>
-                    <option value=""></option>
+                    <option value="{{ $area->id }}">{{ $area->area }}</option>
+                    @endforeach
                 </select>
             </div>
             <div class="select-wrapper">
                 <select name="genre" id="" class="search-form__select">
+                    @foreach($genres as $genre)
                     <option value="" hidden>All genre</option>
-                    <option value=""></option>
+                    <option value="{{ $genre->id }}">{{ $genre->genre }}</option>
+                    @endforeach
                 </select>
             </div>
             <div class="input__search">
@@ -54,7 +58,7 @@
             <label for="favorite">
                 <img src="{{ asset('icon/heart.png') }}" alt="heart"
                 class="favorite__icon
-                {{ $shop->favorites->pluck('user_id')->contains(Auth()->id()) ? 'notFavorite' : '' }}"
+                {{ $shop->favorites->pluck('user_id')->contains(Auth()->id()) ? 'wasFavorite' : '' }}"
                 onclick="this.closest('form').submit();">
             </label>
         </form>

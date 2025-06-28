@@ -9,20 +9,17 @@ use App\Models\Area;
 use App\Models\Genre;
 use App\Models\Shop;
 use App\Models\Favorite;
+use App\Models\Reservation;
 
 class ShopController extends Controller
 {
     public function index()
     {
         $shops = Shop::with('area', 'genre')->get();
-        return view('top', compact('shops'));
+        $areas = Area::all();
+        $genres = Genre::all();
+        return view('top', compact('shops', 'areas', 'genres'));
     }
-
-    public function detail($shopId)
-    {
-        return view('detail');
-    }
-
 
     public function favorite($shopId)
     {
@@ -37,5 +34,42 @@ class ShopController extends Controller
             ]);
         }
         return back();
+    }
+
+        public function detail($shopId)
+    {
+        $shop = Shop::with('area', 'genre')
+        ->where('id', $shopId)
+        ->first();
+        return view('user.detail', compact('shop'));
+    }
+
+    public function reserve(Request $request, $shopId)
+    {
+        $userId = Auth::user()->id;
+        $shop = shop::find($shopId);
+        $reserve = Reservation::create([
+            'user_id' => $userId,
+            'shop_id' => $shopId,
+            'date' => $request->date,
+            'time' => $request->time,
+            'number' => $request->number,
+        ]);
+        return redirect('/done');
+    }
+
+    public function done()
+    {
+        return view('user.done');
+    }
+
+    public function mypage()
+    {
+        $user = Auth::user();
+        $reservations = Reservation::where('user_id', $user->id)->get();
+        $favorites = $user->wasFavorite()
+        ->with('area', 'genre')
+        ->get();
+        return view('user.mypage', compact('reservations', 'favorites'));
     }
 }

@@ -75,6 +75,11 @@ body {
     font-size: 14px;
 }
 
+.search-form__select:focus,
+.search-form__input:focus {
+    outline: none;
+}
+
 .shops-list {
     display: flex;
     flex-wrap: wrap;
@@ -127,7 +132,7 @@ body {
     width: 120px;
     height: 35px;
     border-radius: 6px;
-    background-color: #0063dc;
+    background-color: #3f5af2;
     color: #fff;
     font-size: 18px;
     line-height: 2em;
@@ -146,7 +151,7 @@ body {
     filter: brightness(0) saturate(100%) invert(93%) sepia(5%) saturate(16%) hue-rotate(314deg) brightness(95%) contrast(90%);
 }
 
-.favorite__icon.notFavorite {
+.favorite__icon.wasFavorite {
     filter: brightness(0) saturate(100%) invert(73%) sepia(60%) saturate(5457%) hue-rotate(323deg) brightness(90%) contrast(93%);
 }
 

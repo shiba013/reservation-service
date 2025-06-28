@@ -22,4 +22,9 @@ Route::get('/thanks', function () {
 Route::get('/', [ShopController::class, 'index']);
 Route::get('/detail/{shop_id}', [ShopController::class, 'detail']);
 
-Route::post('/favorite/{shop_id}', [ShopController::class, 'favorite']);
+Route::middleware('auth')->group(function () {
+    Route::post('/detail/{shop_id}', [ShopController::class, 'reserve']);
+    Route::get('/done', [ShopController::class, 'done']);
+    Route::post('/favorite/{shop_id}', [ShopController::class, 'favorite']);
+    Route::get('/mypage', [ShopController::class, 'mypage']);
+});

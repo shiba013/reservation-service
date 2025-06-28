@@ -4,15 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rese</title>
-    <link rel="stylesheet" href="{{ asset('css/common.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/sanitize.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/layouts/common.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/layouts/sanitize.css') }}">
     @yield('css')
 </head>
 <body>
     <header class="header">
         <div class="header__inner">
-            <div class="menu">
-                <img src="{{ asset('icon/menu.png') }}" alt="menu" class="menu__icon" id="toggle">
+            <div class="menu" id="toggle">
+                <p class="menu__bar">＿</p>
+                <p class="menu__bar">＿＿</p>
+                <p class="menu__bar">_</p>
                 <div class="menu__list" id="link">
                     <a href="/" class="menu__link">ホーム</a>
                     @if(Auth::check())
