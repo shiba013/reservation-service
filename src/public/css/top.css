@@ -84,7 +84,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-    padding: 60px;
+    padding: 60px 20px;
 }
 
 .shop-card {

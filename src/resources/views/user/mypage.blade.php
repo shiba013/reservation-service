@@ -9,13 +9,13 @@
     <h1 class="mypage__title">{{ Auth::user()->name }}さん</h1>
     <section class="my-reserve">
         <h2 class="title__logo">予約状況</h2>
+        @foreach($reservations as $reservation)
         <div class="my-reserve__group">
             <div class="reserve__title">
                 <img src="{{ asset('icon/clock.svg') }}" alt="時計画像" class="clock__icon">
                 <h3 class="sub-title">予約</h3>
                 <img src="{{ asset('icon/close.png') }}" alt="閉じるボタン" class="close__icon">
             </div>
-            @foreach($reservations as $reservation)
             <table class="reserve-table">
                 <tr class="reserve-table__row">
                     <th class="table__title">Shop</th>
@@ -37,8 +37,8 @@
                     </td>
                 </tr>
             </table>
-            @endforeach
         </div>
+        @endforeach
     </section>
     <section class="my-favorite">
         <h2 class="title__logo">お気に入り店舗</h2>

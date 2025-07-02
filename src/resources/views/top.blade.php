@@ -10,7 +10,11 @@
         <nav class="header__nav">
             <div class="select-wrapper">
                 <select name="area" id="areaSelect" class="search-form__select">
-                    <option value="">All area</option>
+                    @if(!request('area'))
+                    <option value="" disabled selected hidden>All area</option>
+                    @else
+                    <option value="">リセット</option>
+                    @endif
                     @foreach($areas as $area)
                     <option value="{{ $area->id }}"
                     {{ request('area') == $area->id ? 'selected' : '' }}>
@@ -21,7 +25,11 @@
             </div>
             <div class="select-wrapper">
                 <select name="genre" id="genreSelect" class="search-form__select">
-                    <option value="">All genre</option>
+                    @if(!request('genre'))
+                    <option value="" disabled selected hidden>All genre</option>
+                    @else
+                    <option value="">リセット</option>
+                    @endif
                     @foreach($genres as $genre)
                     <option value="{{ $genre->id }}"
                     {{ request('genre') == $genre->id ? 'selected' : '' }}>

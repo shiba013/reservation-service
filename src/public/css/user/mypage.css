@@ -34,6 +34,7 @@ body {
     border-radius: 6px;
     background-color: #3f5af2;
     color: #fff;
+    margin-bottom: 20px;
 }
 
 .reserve__title {
@@ -47,9 +48,11 @@ body {
 .close__icon {
     width: 30px;
     height: 30px;
+    cursor: pointer;
 }
 
 .sub-title {
+    font-weight: normal;
     font-size: 20px;
 }
 
