@@ -82,6 +82,8 @@ class Shop extends Model
 
     public function scopeGenreSearch($query, $genre_id)
     {
-        $query->where('genre_id', $genre_id);
+        if(!empty($genre_id)) {
+            $query->where('genre_id', $genre_id);
+        }
     }
 }

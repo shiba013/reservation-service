@@ -44,6 +44,20 @@ class ShopController extends Controller
         return view('user.detail', compact('shop'));
     }
 
+    public function search(Request $request)
+    {
+        $shops = Shop::with('area', 'genre')
+        ->AreaSearch($request->area)
+        ->GenreSearch($request->genre)
+        ->KeywordSearch($request->keyword)
+        ->get();
+
+        $areas = Area::all();
+        $genres = Genre::all();
+
+        return view('top', compact('shops', 'areas', 'genres'));
+    }
+
     public function reserve(Request $request, $shopId)
     {
         $userId = Auth::user()->id;

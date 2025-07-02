@@ -21,6 +21,7 @@ Route::get('/thanks', function () {
 
 Route::get('/', [ShopController::class, 'index']);
 Route::get('/detail/{shop_id}', [ShopController::class, 'detail']);
+Route::get('/search', [ShopController::class, 'search']);
 
 Route::middleware('auth')->group(function () {
     Route::post('/detail/{shop_id}', [ShopController::class, 'reserve']);

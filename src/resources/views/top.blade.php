@@ -6,27 +6,33 @@
 
 @section('header')
 <div class="search">
-    <form action="" method="get" class="search-form">
+    <form action="/search" method="get" class="search-form" id="searchForm">
         <nav class="header__nav">
             <div class="select-wrapper">
-                <select name="area" id="" class="search-form__select">
+                <select name="area" id="areaSelect" class="search-form__select">
+                    <option value="">All area</option>
                     @foreach($areas as $area)
-                    <option value="" hidden>All area</option>
-                    <option value="{{ $area->id }}">{{ $area->area }}</option>
+                    <option value="{{ $area->id }}"
+                    {{ request('area') == $area->id ? 'selected' : '' }}>
+                        {{ $area->area }}
+                    </option>
                     @endforeach
                 </select>
             </div>
             <div class="select-wrapper">
-                <select name="genre" id="" class="search-form__select">
+                <select name="genre" id="genreSelect" class="search-form__select">
+                    <option value="">All genre</option>
                     @foreach($genres as $genre)
-                    <option value="" hidden>All genre</option>
-                    <option value="{{ $genre->id }}">{{ $genre->genre }}</option>
+                    <option value="{{ $genre->id }}"
+                    {{ request('genre') == $genre->id ? 'selected' : '' }}>
+                        {{ $genre->genre }}
+                    </option>
                     @endforeach
                 </select>
             </div>
             <div class="input__search">
                 <img src="{{ asset('icon/search.png') }}" alt="search" class="search-icon">
-                <input type="text" name="keyword" value="{{ request('keyword') }}" class="search-form__input" placeholder="Search ...">
+                <input type="text" name="keyword" value="{{ request('keyword') }}" class="search-form__input" placeholder="Search ..." id="keywordInput">
             </div>
         </nav>
     </form>
@@ -66,3 +72,4 @@
     @endforeach
 </div>
 @endsection
+<script src="{{ asset('js/top.js') }}"></script>
