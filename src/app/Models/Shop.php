@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Shop extends Model
 {
@@ -15,7 +16,20 @@ class Shop extends Model
         'name',
         'image',
         'overview',
+        'start_time',
+        'end_time',
     ];
+
+    public function getTimeAttribute($value)
+    {
+        return Carbon::parse($value);
+    }
+
+    public function setTimeAttribute($value)
+    {
+        $this->attributes['start_time'] = Carbon::parse($value)->format('H:i');
+        $this->attributes['end_time'] = Carbon::parse($value)->format('H:i');
+    }
 
     public function area()
     {
@@ -35,6 +49,11 @@ class Shop extends Model
     public function reservations()
     {
         return $this->hasMany(Reservation::class);
+    }
+
+    public function reservation_slots()
+    {
+        return $this->hasMany(reservation_slot::class);
     }
 
     public function reviews()

@@ -21,6 +21,8 @@ class CreateShopsTable extends Migration
             $table->string('name', 30);
             $table->string('image');
             $table->text('overview');
+            $table->time('start_time')->comment('営業開始時間');
+            $table->time('end_time')->comment('営業終了時間');
             $table->timestamps();
         });
     }
