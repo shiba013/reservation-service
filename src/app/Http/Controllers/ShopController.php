@@ -15,10 +15,12 @@ class ShopController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
         $shops = Shop::with('area', 'genre')->get();
         $areas = Area::all();
         $genres = Genre::all();
-        return view('top', compact('shops', 'areas', 'genres'));
+        $favoriteIds = $user ? $user->favorites->pluck('shop_id')->toArray() : [];
+        return view('top', compact('shops', 'areas', 'genres', 'favoriteIds'));
     }
 
     public function favorite($shopId)
@@ -27,13 +29,14 @@ class ShopController extends Controller
         $favorite = Favorite::where('user_id', $user->id)->where('shop_id', $shopId)->first();
         if($favorite) {
             $favorite->delete();
+            return response()->json(['status' => 'removed']);
         } else {
             Favorite::create([
                 'user_id' => $user->id,
                 'shop_id' => $shopId,
             ]);
+            return response()->json(['status' => 'added']);
         }
-        return back();
     }
 
         public function detail($shopId)
@@ -46,16 +49,16 @@ class ShopController extends Controller
 
     public function search(Request $request)
     {
+        $user = Auth::user();
         $shops = Shop::with('area', 'genre')
         ->AreaSearch($request->area)
         ->GenreSearch($request->genre)
         ->KeywordSearch($request->keyword)
         ->get();
-
         $areas = Area::all();
         $genres = Genre::all();
-
-        return view('top', compact('shops', 'areas', 'genres'));
+        $favoriteIds = $user ? $user->favorites->pluck('shop_id')->toArray() : [];
+        return view('top', compact('shops', 'areas', 'genres', 'favoriteIds'));
     }
 
     public function reserve(Request $request, $shopId)
@@ -81,9 +84,10 @@ class ShopController extends Controller
     {
         $user = Auth::user();
         $reservations = Reservation::where('user_id', $user->id)->get();
-        $favorites = $user->wasFavorite()
-        ->with('area', 'genre')
+        $favoriteIds = $user->favorites->pluck('shop_id');
+        $favoriteShops = Shop::with('area', 'genre')
+        ->whereIn('id', $favoriteIds)
         ->get();
-        return view('user.mypage', compact('reservations', 'favorites'));
+        return view('user.mypage', compact('reservations', 'favoriteShops'));
     }
 }

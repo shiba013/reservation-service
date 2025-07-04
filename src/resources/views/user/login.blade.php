@@ -5,6 +5,13 @@
 @endsection
 
 @section('content')
+@if(session('message'))
+<div class="session">
+    <p class="session__message">
+        {{ session('message') }}
+    </p>
+</div>
+@endif
 <div class="login">
     <div class="login__inner">
         <form action="/login" method="post" class="login-form">

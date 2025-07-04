@@ -70,6 +70,8 @@
             <input type="submit" value="予約する" class="submit__btn">
         </form>
     </section>
-    <script src="{{ asset('js/detail.js') }}"></script>
 </div>
+@endsection
+@section('scripts')
+<script src="{{ asset('js/reflection.js') }}"></script>
 @endsection

@@ -1,4 +1,4 @@
-//検索フォーム
+//検索フォーム即時送信
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('searchForm');
     const areaSelect = document.getElementById('areaSelect');
@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const keywordInput = document.getElementById('keywordInput');
     let timer = null;
 
-    //selectタグ即時送信
     areaSelect.addEventListener('change', () => form.submit());
     genreSelect.addEventListener('change', () => form.submit());
 

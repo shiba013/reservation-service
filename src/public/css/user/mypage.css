@@ -149,19 +149,26 @@ body {
     cursor: pointer;
 }
 
-.favorite__btn {
-    display: none;
+.favorite-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
 }
 
-.favorite__icon {
+.favorite-icon.off {
     position: absolute;
-    transform: translate(13.5em, -3.5em);
+    transform: translate(16em, -5.1em);
     width: 45px;
     height: 45px;
     filter: brightness(0) saturate(100%) invert(93%) sepia(5%) saturate(16%) hue-rotate(314deg) brightness(95%) contrast(90%);
 }
 
-.favorite__icon.notFavorite {
+.favorite-icon.on {
+    position: absolute;
+    transform: translate(16em, -5.1em);
+    width: 45px;
+    height: 45px;
     filter: brightness(0) saturate(100%) invert(73%) sepia(60%) saturate(5457%) hue-rotate(323deg) brightness(90%) contrast(93%);
 }
 

@@ -43,7 +43,7 @@
     <section class="my-favorite">
         <h2 class="title__logo">お気に入り店舗</h2>
         <div class="my-favorite__card-group">
-            @foreach($favorites as $shop)
+            @foreach($favoriteShops as $shop)
             <div class="favorite-card">
                 <img src="{{ asset($shop->image) }}" alt="店舗画像" class="favorite-card__img">
                 <div class="favorite-card__info">
@@ -54,22 +54,21 @@
                     </p>
                     <p class="favorite-card__genre">
                         <span class="favorite-card__span">#</span>
-                        {{ $shop-> genre->genre }}
+                        {{ $shop->genre->genre }}
                     </p>
                     <a href="/detail/{{ $shop->id }}" class="shop__link">詳しく見る</a>
                 </div>
-                <form action="/favorite/{{ $shop->id }}" method="post" class="favorite-form">
-                    @csrf
-                    <input type="checkbox" name="favorite" id="favorite" class="favorite__btn">
-                    <label for="favorite">
-                        <img src="{{ asset('icon/heart.png') }}" alt="heart"
-                        class="favorite__icon
-                        {{ $shop->favorites->pluck('user_id')->contains(Auth()->id()) ? 'notFavorite' : '' }}" onclick="this.closest('form').submit();">
-                    </label>
-                </form>
+                <button class="favorite-button" data-shop-id="{{ $shop->id }}"
+                data-wasFavorite="1">
+                    <img src="{{ asset('icon/heart.png') }}" alt="heart"
+                    class="favorite-icon on">
+                </button>
             </div>
             @endforeach
         </div>
     </section>
 </div>
+@endsection
+@section('scripts')
+<script src="{{ asset('js/favorite.js') }}"></script>
 @endsection

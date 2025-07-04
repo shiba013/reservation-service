@@ -66,18 +66,19 @@
                 <a href="/detail/{{ $shop->id }}" class="shop__link">詳しく見る</a>
             </div>
         </div>
-        <form action="/favorite/{{ $shop->id }}" method="post" class="favorite-form">
-            @csrf
-            <input type="checkbox" name="favorite" id="favorite" class="favorite__btn">
-            <label for="favorite">
-                <img src="{{ asset('icon/heart.png') }}" alt="heart"
-                class="favorite__icon
-                {{ $shop->favorites->pluck('user_id')->contains(Auth()->id()) ? 'wasFavorite' : '' }}"
-                onclick="this.closest('form').submit();">
-            </label>
-        </form>
+        @php
+        $wasFavorite = in_Array($shop->id, $favoriteIds);
+        @endphp
+        <button class="favorite-button" data-shop-id="{{ $shop->id }}"
+        data-wasFavorite="{{ $wasFavorite ? '1' : '0' }}">
+            <img src="{{ asset('icon/heart.png') }}" alt="heart"
+            class="favorite-icon {{ $wasFavorite ? 'on' : 'off' }}">
+        </button>
     </div>
     @endforeach
 </div>
 @endsection
-<script src="{{ asset('js/top.js') }}"></script>
+@section('scripts')
+<script src="{{ asset('js/search_shops.js') }}"></script>
+<script src="{{ asset('js/favorite.js') }}"></script>
+@endsection
