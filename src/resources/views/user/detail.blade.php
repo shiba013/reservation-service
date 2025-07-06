@@ -32,6 +32,9 @@
             </div>
             <div class="reserve-form__group">
                 <input type="date" name="date" class="reserve-form__input" value="{{ old('date') }}" id="selectDate">
+                @error('date')
+                <p class="alert">{{ $message }}</p>
+                @enderror
             </div>
             <div class="reserve-form__group">
                 <select name="time" id="selectTime" class="reserve-form__select">
@@ -39,6 +42,9 @@
                     <option value="17:00">17:00</option>
                     <option value="18:00">18:00</option>
                 </select>
+                @error('time')
+                <p class="alert">{{ $message }}</p>
+                @enderror
             </div>
             <div class="reserve-form__group">
                 <select name="number" id="selectNumber" class="reserve-form__select">
@@ -46,6 +52,9 @@
                     <option value="1">1人</option>
                     <option value="2">2人</option>
                 </select>
+                @error('number')
+                <p class="alert">{{ $message }}</p>
+                @enderror
             </div>
             <div class="reserve-form__group">
                 <table class="reserve-table">

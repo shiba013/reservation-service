@@ -87,6 +87,122 @@ body {
     padding-bottom: 20px;
 }
 
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(3px);
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+}
+
+.edit,
+.update,
+.delete {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 330px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    color: #3f5af2;
+    z-index: 100;
+}
+
+.edit-form,
+.update-form,
+.delete-form {
+    display: grid;
+    grid-template-rows: 20%, 50%, 30%;
+    height: 100%;
+}
+
+.edit-form__group,
+.update-form__group,
+.delete-form__group {
+    width: 100%;
+    text-align: center;
+    margin-top: 25px;
+
+}
+
+.edit-form__group:last-of-type,
+.update-form__group:last-of-type,
+.delete-form__group:last-of-type {
+    display: flex;
+    justify-content: space-around;
+}
+
+.edit-message,
+.update-message,
+.delete-message {
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.edit-table,
+.update-table,
+.delete-table {
+    margin: 0px auto;
+    text-align: left;
+    color: #000;
+}
+
+.edit-form__input {
+    width: 100%;
+    height: 40px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 18px;
+}
+
+.edit-form__select {
+    width: 100%;
+    height: 40px;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url('/icon/downArrow.png');
+    background-repeat: no-repeat;
+    background-size: 8px auto;
+    background-position: right 12px center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 18px;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.form-btn__cancel {
+    width: 120px;
+    height: 40px;
+    font-size: 18px;
+    border: 1px solid #3f5af2;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #3f5af2;
+}
+
+.form-btn__edit,
+.form-btn__update,
+.form-btn__delete {
+    width: 120px;
+    height: 40px;
+    font-size: 18px;
+    border: 1px solid #3f5af2;
+    border-radius: 4px;
+    background-color: #3f5af2;
+    color: #fff;
+}
+
 .my-favorite {
     grid-column: 2/4;
     padding-right: 60px;
@@ -209,8 +325,9 @@ body {
         line-height: 2.5em;
     }
 
-    .favorite__icon {
-        transform: translate(10em, -2em);
+    .favorite-icon.off,
+    .favorite-icon.on {
+        transform: translate(11em, -3.5em);
         width: 30px;
         height: 30px;
     }

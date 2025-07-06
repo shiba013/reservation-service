@@ -9,6 +9,11 @@
     padding: 40px 60px;
 }
 
+.header__title {
+    font-size: 30px;
+    color: #3f5af2;
+}
+
 .menu {
     position: relative;
     width: 50px;
@@ -32,6 +37,7 @@
     left: 0;
     background-color: #fff;
     border: 1px solid #ddd;
+    border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     z-index: 100;
     min-width: 150px;
@@ -52,7 +58,8 @@
     font-size: 16px;
 }
 
-.header__title {
-    font-size: 30px;
-    color: #3f5af2;
+.menu__link:hover,
+.logout:hover {
+    background-color: #b3d7ff;
+    border-radius: 8px;
 }
