@@ -5,6 +5,19 @@
 @endsection
 
 @section('content')
+@if(session('success'))
+<div class="success-session">
+    <p class="session__message">
+        {{ session('success') }}
+    </p>
+</div>
+@elseif(session('fail'))
+<div class="fail-session">
+    <p class="session__message">
+        {{ session('fail') }}
+    </p>
+</div>
+@endif
 <div class="mypage">
     <h1 class="mypage__title">{{ Auth::user()->name }}さん</h1>
     <section class="my-reserve">

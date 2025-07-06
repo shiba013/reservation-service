@@ -55,11 +55,6 @@ class UserController extends Controller
         return view('user.mypage', compact('reservations', 'favoriteShops'));
     }
 
-    public function edit()
-    {
-        //
-    }
-
     public function update(ReservationRequest $request, $reservationId)
     {
         $reservation = Reservation::find($reservationId);

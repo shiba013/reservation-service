@@ -2,6 +2,27 @@ body {
     background-color: #f0eff2;
 }
 
+.success-session {
+    padding: 20px 30px;
+    margin-top: 20px;
+    border: none;
+    background-color: rgba(183, 250, 195, 1);
+    ;
+}
+
+.fail-session {
+    padding: 20px 30px;
+    margin-top: 20px;
+    border: none;
+    background-color: #ffdbfc;
+}
+
+.session__message {
+    color: #5f5f5f;
+    font-weight: 600;
+    font-size: 20px;
+}
+
 .mypage {
     display: grid;
     grid-template-columns: 1.5fr 1fr 1fr;
@@ -109,7 +130,7 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 400px;
+    width: 450px;
     height: 330px;
     border-radius: 8px;
     background-color: #fff;

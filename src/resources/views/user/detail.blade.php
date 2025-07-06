@@ -8,7 +8,7 @@
 <div class="detail">
     <section class="shop-info">
         <div class="shop-info__group">
-            <a href="/" class="back__link">
+            <a href="javascript:history.back()" class="back__link">
                 <div class="back__btn">＜</div>
             </a>
             <h2 class="shop__name">{{ $shop->name }}</h2>
