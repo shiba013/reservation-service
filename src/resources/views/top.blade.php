@@ -10,12 +10,12 @@
         <nav class="header__nav">
             <div class="select-wrapper">
                 <select name="area" id="areaSelect" class="search-form__select">
-                    @if(!request('area'))
+                    @if (!request('area'))
                     <option value="" disabled selected hidden>All area</option>
                     @else
                     <option value="">リセット</option>
                     @endif
-                    @foreach($areas as $area)
+                    @foreach ($areas as $area)
                     <option value="{{ $area->id }}"
                     {{ request('area') == $area->id ? 'selected' : '' }}>
                         {{ $area->area }}
@@ -25,12 +25,12 @@
             </div>
             <div class="select-wrapper">
                 <select name="genre" id="genreSelect" class="search-form__select">
-                    @if(!request('genre'))
+                    @if (!request('genre'))
                     <option value="" disabled selected hidden>All genre</option>
                     @else
                     <option value="">リセット</option>
                     @endif
-                    @foreach($genres as $genre)
+                    @foreach ($genres as $genre)
                     <option value="{{ $genre->id }}"
                     {{ request('genre') == $genre->id ? 'selected' : '' }}>
                         {{ $genre->genre }}
@@ -49,7 +49,7 @@
 
 @section('content')
 <div class="shops-list">
-    @foreach($shops as $shop)
+    @foreach ($shops as $shop)
     <div class="shops-list__inner">
         <div class="shop-card">
             <img src="{{ asset($shop->image) }}" alt="店舗画像" class="shop-card__img">

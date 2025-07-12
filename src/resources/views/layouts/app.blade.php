@@ -17,16 +17,37 @@
                 <p class="menu__bar">＿＿</p>
                 <p class="menu__bar">_</p>
                 <div class="menu__list" id="link">
+                    @if (Auth::check())
+                        @if (session('login_type') === 'user')
+                        <a href="/" class="menu__link">ホーム</a>
+                        <a href="/mypage" class="menu__link">マイページ</a>
+                        @elseif (session('login_type') === 'owner')
+                        <a href="/owner" class="menu__link">ホーム</a>
+                        <a href="/owner/create" class="menu__link">新規店舗作成</a>
+                        <a href="/owner/email" class="menu__link">メール配信</a>
+                        @elseif (session('login_type') === 'admin')
+                        <a href="/admin" class="menu__link">ホーム</a>
+                        <a href="/owner" class="menu__link">店舗代表者用ページへ</a>
+                        <a href="/admin/email" class="menu__link">メール配信</a>
+                        @endif
+                        <form action="/logout" method="post" class="logout">
+                            @csrf
+                            <input type="submit" value="ログアウト" class="logout__btn">
+                        </form>
+                    @elseif (session('login_type') === 'user')
                     <a href="/" class="menu__link">ホーム</a>
-                    @if(Auth::check())
-                    <a href="/mypage" class="menu__link">マイページ</a>
-                    <form action="/logout" method="post" class="logout">
-                        @csrf
-                        <input type="submit" value="ログアウト" class="logout__btn">
-                    </form>
-                    @else
                     <a href="/register" class="menu__link">新規会員登録</a>
                     <a href="/login" class="menu__link">ログイン</a>
+                    @elseif (session('login_type') === 'owner')
+                    <a href="/" class="menu__link">ホーム</a>
+                    <a href="/owner/create" class="menu__link">新規店舗作成</a>
+                    <a href="/owner/email" class="menu__link">メール配信</a>
+                    <a href="/owner/login" class="menu__link">ログイン</a>
+                    @elseif (session('login_type') === 'admin')
+                    <a href="/" class="menu__link">ホーム</a>
+                    <a href="/owner" class="menu__link">店舗代表者用ページへ</a>
+                    <a href="/admin/email" class="menu__link">メール配信</a>
+                    <a href="/admin/login" class="menu__link">ログイン</a>
                     @endif
                 </div>
             </div>

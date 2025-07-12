@@ -16,7 +16,7 @@ class ShopSeeder extends Seeder
     {
         $shops = [
             [
-                'user_id' => 3,
+                'user_id' => 4,
                 'area_id' => 1,
                 'genre_id' => 1,
                 'name' => '仙人',
@@ -24,7 +24,7 @@ class ShopSeeder extends Seeder
                 'overview' => '料理長厳選の食材から作る寿司を用いたコースをぜひお楽しみください。食材・味・価格、お客様の満足度を徹底的に追及したお店です。特別な日のお食事、ビジネス接待まで気軽に使用することができます。',
             ],
             [
-                'user_id' => 3,
+                'user_id' => 4,
                 'area_id' => 2,
                 'genre_id' => 3,
                 'name' => '牛助',
@@ -32,7 +32,7 @@ class ShopSeeder extends Seeder
                 'overview' => '焼肉業界で20年間経験を積み、肉を熟知したマスターによる実力派焼肉店。長年の実績とお付き合いをもとに、なかなか食べられない希少部位も仕入れております。また、ゆったりとくつろげる空間はお仕事終わりの一杯や女子会にぴったりです。',
             ],
             [
-                'user_id' => 3,
+                'user_id' => 4,
                 'area_id' => 2,
                 'genre_id' => 2,
                 'name' => '戦慄',

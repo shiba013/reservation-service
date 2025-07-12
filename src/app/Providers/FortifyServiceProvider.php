@@ -30,14 +30,6 @@ class FortifyServiceProvider extends ServiceProvider
                 return redirect('/thanks');
             }
         });
-
-        $this->app->instance(LogoutResponse::class, new class implements LogoutResponse
-        {
-            public function toResponse($request)
-            {
-                return redirect('/login');
-            }
-        });
     }
 
     /**
@@ -49,12 +41,13 @@ class FortifyServiceProvider extends ServiceProvider
 
         Fortify::registerView(function ()
         {
-            return view('user.register');
+            return view('auth.register');
         });
 
         Fortify::loginView(function ()
         {
-            return view('user.login');
+            session(['login_type' => 'user']);
+            return view('auth.login');
         });
 
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
