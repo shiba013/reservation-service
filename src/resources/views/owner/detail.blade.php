@@ -70,17 +70,21 @@
             @enderror
         </div>
         <div class="edit-form__group">
-            <label for="start_time" class="setting-time__label">営業開始時間</label>
-            <input type="time" name="start_time" id="start_time" class="setting-time__input"
-            value="{{ old('start_time', $shop->start_time) }}">
+            <label for="start_time" class="edit-form__label">営業開始時間
+                <span class="edit-form__span">必須</span>
+            </label>
+            <input type="time" name="start_time" id="start_time" class="edit-form__input"
+            value="{{ old('start_time', $shop->start_time->format('H:i')) }}">
             @error('start_time')
             <p class="alert">{{ $message }}</p>
             @enderror
         </div>
         <div class="edit-form__group">
-            <label for="end_time" class="setting-time__label">営業終了時間</label>
-            <input type="time" name="end_time" id="end_time" class="setting-time__input"
-            value="{{ old('end_time', $shop->end_time) }}">
+            <label for="end_time" class="edit-form__label">営業終了時間
+                <span class="edit-form__span">必須</span>
+            </label>
+            <input type="time" name="end_time" id="end_time" class="edit-form__input"
+            value="{{ old('end_time', $shop->end_time->format('H:i')) }}">
             @error('end_time')
             <p class="alert">{{ $message }}</p>
             @enderror
@@ -93,4 +97,5 @@
 @endsection
 
 @section('scripts')
-<script src="{{ asset('js/image_preview.js') }}"></script>
+<script src="{{ asset('js/owner/image_preview.js') }}"></script>
+@endsection

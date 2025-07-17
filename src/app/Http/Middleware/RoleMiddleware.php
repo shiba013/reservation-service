@@ -22,7 +22,9 @@ class RoleMiddleware
         }
 
         $user = Auth::user();
-        if($role !== null && $user->role != $role) {
+        $allow = explode(',', $role);
+
+        if (!in_array((string)$user->role, $allow)) {
             abort(403, 'アクセス権がありません');
         }
         return $next($request);

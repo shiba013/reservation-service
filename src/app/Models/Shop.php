@@ -11,6 +11,7 @@ class Shop extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'area_id',
         'genre_id',
         'name',
@@ -20,15 +21,24 @@ class Shop extends Model
         'end_time',
     ];
 
-    public function getTimeAttribute($value)
+    public function getStartTimeAttribute($value)
     {
         return Carbon::parse($value);
     }
 
-    public function setTimeAttribute($value)
+    public function getEndTimeAttribute($value)
+    {
+        return Carbon::parse($value);
+    }
+
+    public function setStartTimeAttribute($value)
     {
         $this->attributes['start_time'] = Carbon::parse($value)->format('H:i');
-        $this->attributes['end_time'] = Carbon::parse($value)->format('H:i');
+    }
+
+    public function setEndTimeAttribute($value)
+    {
+        $this->attributes['emd_time'] = Carbon::parse($value)->format('H:i');
     }
 
     public function area()
@@ -53,7 +63,7 @@ class Shop extends Model
 
     public function reservation_slots()
     {
-        return $this->hasMany(reservation_slot::class);
+        return $this->hasMany(ReservationSlot::class);
     }
 
     public function reviews()

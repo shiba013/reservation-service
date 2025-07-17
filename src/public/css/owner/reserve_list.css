@@ -1,0 +1,407 @@
+body {
+    background-color: #f0eff2;
+}
+
+.date__search-form,
+.setting-btn {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    width: 400px;
+    margin-left: auto;
+    border-radius: 6px;
+    background-color: #fff;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.calendar__label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    width: 50%;
+    height: 40px;
+    padding: 5px 30px;
+    position: relative;
+    font-size: 18px;
+}
+
+.calendar__label::after {
+    content: '';
+    position: absolute;
+    top: 23%;
+    right: 0;
+    transform: translateY(0%);
+    width: 1px;
+    height: 30px;
+    background-color: #ddd;
+}
+
+.calendar__img {
+    width: 30px;
+    height: 30px;
+}
+
+.calendar__input {
+    position: absolute;
+    width: 170px;
+    height: 50px;
+    opacity: 0;
+    cursor: pointer;
+}
+
+input.calendar__input::-webkit-calendar-picker-indicator {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.today-link {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    width: 50%;
+    padding: 5px 30px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #000;
+}
+
+.success-session {
+    padding: 20px 30px;
+    margin-top: 20px;
+    border: none;
+    background-color: rgba(183, 250, 195, 1);
+}
+
+.fail-session {
+    padding: 20px 30px;
+    margin-top: 20px;
+    border: none;
+    background-color: #ffdbfc;
+}
+
+.session__message {
+    color: #5f5f5f;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.reserve-list {
+    padding: 30px;
+    margin-top: 40px;
+}
+
+.reserve-list__title {
+    padding: 5px;
+    margin-bottom: 40px;
+    text-align: center;
+    font-size: 26px;
+}
+
+.reserve-list__group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 95%;
+    padding: 0px 30px;
+    margin-bottom: 30px;
+}
+
+.reserve-list__group:nth-child(4) {
+    margin: 0;
+}
+
+.back {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.back__link {
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+}
+
+.back__btn {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    border-radius: 6px;
+    line-height: 2.5em;
+    background-color: #fff;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.shop-name {
+    font-size: 22px;
+}
+
+.setting-btn {
+    position: relative;
+}
+
+.set-btn,
+.stop-btn {
+    width: 50%;
+    height: 50px;
+    padding: 5px 30px;
+    background-color: #fff;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.set-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 50%;
+    transform: translateY(35%);
+    width: 1px;
+    height: 30px;
+    background-color: #ddd;
+}
+
+.export-btn {
+    width: 270px;
+    height: 50px;
+    padding: 1px 10px;
+    border: none;
+    border-radius: 6px;
+    background-color: #3f5af2;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    letter-spacing: 0.2em;
+    font-size: 20px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.export-btn {
+    width: 150px;
+}
+
+.select-date {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100px;
+    background-color: #3f5af2;
+    color: #fff;
+}
+
+.previous-day,
+.next-day {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 10%;
+    padding: 0px 15px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.left-arrow__img {
+    width: 30%;
+    height: 30%;
+    filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(2%) hue-rotate(21deg) brightness(105%) contrast(101%);
+}
+
+.today {
+    font-size: 22px;
+}
+
+
+.right-arrow__img {
+    width: 30%;
+    height: 30%;
+    transform: rotate(180deg);
+    filter: brightness(0) saturate(100%) invert(100%) sepia(99%) saturate(0%) hue-rotate(312deg) brightness(101%) contrast(101%);
+}
+
+.reserve-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.reserve-table__row {
+    width: 100%;
+}
+
+.table-title {
+    height: 60px;
+    vertical-align: middle;
+    background-color: #e2edf6;
+    border: 1px solid #ddd;
+    font-size: 20px;
+}
+
+.table-data {
+    height: 60px;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    font-size: 18px;
+}
+
+.table-data:last-of-type {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.reserve-update {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 18px;
+    background-color: #3f5af2;
+    color: #fff;
+    cursor: pointer;
+
+}
+
+.reserve-delete {
+    padding: 5px 10px;
+    border: 1px solid #3f5af2;
+    border-radius: 6px;
+    font-size: 18px;
+    background-color: #fff;
+    color: #3f5af2;
+    cursor: pointer;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(3px);
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+}
+
+.stop,
+.update,
+.delete {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    color: #3f5af2;
+    z-index: 100;
+}
+
+.stop-form,
+.update-form,
+.delete-form {
+    display: grid;
+    grid-template-rows: 20%, 50%, 30%;
+    height: 100%;
+}
+
+.stop-form__group,
+.update-form__group,
+.delete-form__group {
+    width: 100%;
+    text-align: center;
+    padding: 30px 0px 15px;
+}
+
+.stop-form__group:first-of-type,
+.update-form__group:first-of-type,
+.delete-form__group:first-of-type {
+    background-color: #3f5af2;
+    color: #fff;
+}
+
+.stop-form__group:last-of-type,
+.update-form__group:last-of-type,
+.delete-form__group:last-of-type {
+    display: flex;
+    justify-content: space-around;
+    padding: 30px 0px 40px;
+}
+
+.stop-message,
+.update-message,
+.delete-message {
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.update-table,
+.delete-table {
+    margin: 0px auto;
+    text-align: left;
+    color: #000;
+}
+
+.update-form__input {
+    width: 150px;
+    height: 40px;
+    padding: 1px 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 18px;
+}
+
+.table__title {
+    width: 30%;
+    height: 65px;
+    padding: 5px 15px;
+    font-weight: normal;
+    font-size: 18px;
+}
+
+.table__data {
+    width: 60%;
+    height: 65px;
+    padding-left: 15px;
+    font-size: 18px;
+}
+
+.form-btn__cancel {
+    width: 150px;
+    height: 40px;
+    font-size: 18px;
+    border: 1px solid #3f5af2;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #3f5af2;
+}
+
+.form-btn__action {
+    width: 150px;
+    height: 40px;
+    font-size: 18px;
+    border: 1px solid #3f5af2;
+    border-radius: 4px;
+    background-color: #3f5af2;
+    color: #fff;
+}
+
+.alert {
+    margin-top: 3px;
+    width: fit-content;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ff0000;
+}

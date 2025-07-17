@@ -33,20 +33,20 @@
             </div>
             <table class="reserve-table">
                 <tr class="reserve-table__row">
-                    <th class="table__title">Shop</th>
-                    <td class="table__data">{{ $reservation->shop->name }}</td>
+                    <th class="table-title">Shop</th>
+                    <td class="table-data">{{ $reservation->shop->name }}</td>
                 </tr>
                 <tr class="reserve-table__row">
-                    <th class="table__title">Data</th>
-                    <td class="table__data">{{ $reservation->date->format('Y-m-d') }}</td>
+                    <th class="table-title">Data</th>
+                    <td class="table-data">{{ $reservation->date->format('Y-m-d') }}</td>
                 </tr>
                 <tr class="reserve-table__row">
-                    <th class="table__title">Time</th>
-                    <td class="table__data">{{ $reservation->time->format('H:i') }}</td>
+                    <th class="table-title">Time</th>
+                    <td class="table-data">{{ $reservation->time->format('H:i') }}</td>
                 </tr>
                 <tr class="reserve-table__row">
-                    <th class="table__title">Number</th>
-                    <td class="table__data">
+                    <th class="table-title">Number</th>
+                    <td class="table-data">
                         {{ $reservation->number }}
                         <span class="table__data__span">人</span>
                     </td>
@@ -71,30 +71,37 @@
                                 <td class="table__data">
                                     <input type="date" name="date" class="edit-form__input"
                                     value="{{ old('date', $reservation->date->format('Y-m-d')) }}">
+                                    @error('date')
+                                    <p class="alert" id="error-date-{{ $reservation->id }}">{{ $message }}</p>
+                                    @enderror
                                 </td>
                             </tr>
                             <tr class="edit-table__row">
                                 <th class="table__title">Time</th>
                                 <td class="table__data">
-                                    <select name="time" class="edit-form__select">
-                                        <option value="{{ $reservation->time }}">
-                                            {{ $reservation->time->format('H:i') }}
+                                    <select name="time" id="selectTime-{{ $reservation->id }}" class="edit-form__select">
+                                        <option value="" hidden>時間を選択してください</option>
+                                        @foreach ($slotsShopId[$reservation->shop_id] as $slot)
+                                        <option value="{{ $slot->reserve_start->format('H:i') }}"
+                                        data-remaining="{{ $slot->remaining_number }}">
+                                            {{ $slot->reserve_start->format('H:i') }}
                                         </option>
-                                        <option value="17:00">17:00</option>
-                                        <option value="18:00">18:00</option>
+                                        @endforeach
                                     </select>
+                                    @error('time')
+                                    <p class="alert" id="error-time-{{ $reservation->id }}">{{ $message }}</p>
+                                    @enderror
                                 </td>
                             </tr>
                             <tr class="edit-table__row">
                                 <th class="table__title">Number</th>
                                 <td class="table__data">
-                                    <select name="number" class="edit-form__select">
-                                        <option value="{{ $reservation->number }}">
-                                            {{ $reservation->number }}人
-                                        </option>
-                                        <option value="1">1人</option>
-                                        <option value="2">2人</option>
+                                    <select name="number" id="selectNumber-{{ $reservation->id }}" class="edit-form__select">
+                                        <option value="" hidden>人数を選択してください</option>
                                     </select>
+                                    @error('number')
+                                    <p class="alert" id="error-number-{{ $reservation->id }}">{{ $message }}</p>
+                                    @enderror
                                 </td>
                             </tr>
                         </table>
@@ -210,8 +217,8 @@
                     </p>
                     <a href="/detail/{{ $shop->id }}" class="shop__link">詳しく見る</a>
                 </div>
-                <button class="favorite-button" data-shop-id="{{ $shop->id }}"
-                data-wasFavorite="1">
+                <button class="favorite-button" type="button" data-shop-id="{{ $shop->id }}"
+                data-was-favorite="1" data-is-auth="{{ auth()->check() ? '1' : '0' }}">
                     <img src="{{ asset('icon/heart.png') }}" alt="heart"
                     class="favorite-icon on">
                 </button>
@@ -222,6 +229,13 @@
 </div>
 @endsection
 @section('scripts')
-<script src="{{ asset('js/reservation.js') }}"></script>
-<script src="{{ asset('js/favorite.js') }}"></script>
+<script src="{{ asset('js/user/reservation.js') }}"></script>
+<script src="{{ asset('js/user/favorite.js') }}"></script>
+@if (session('reservation_error_id'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            openEditForm({{ session('reservation_error_id') }});
+        });
+    </script>
+@endif
 @endsection

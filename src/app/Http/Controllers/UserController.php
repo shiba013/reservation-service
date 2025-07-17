@@ -11,17 +11,27 @@ use App\Models\Genre;
 use App\Models\Shop;
 use App\Models\Favorite;
 use App\Models\Reservation;
+use App\Models\ReservationSlot;
+use Illuminate\Support\Carbon;
 
 class UserController extends Controller
 {
     public function reserve(ReservationRequest $request, $shopId)
     {
         $userId = Auth::user()->id;
-        $shop = shop::find($shopId);
+        $shop = Shop::find($shopId);
+        $date = Carbon::parse($request->date)->format('Y-m-d');
+
+        $slot = ReservationSlot::where('shop_id', $shopId)
+        ->where('date', $date)
+        ->where('reserve_start', $request->time)
+        ->first();
+
         $reserve = Reservation::create([
             'user_id' => $userId,
             'shop_id' => $shopId,
-            'date' => $request->date,
+            'reservation_slot_id' => $slot->id,
+            'date' => $date,
             'time' => $request->time,
             'number' => $request->number,
         ]);
@@ -47,19 +57,54 @@ class UserController extends Controller
     public function mypage()
     {
         $user = Auth::user();
-        $reservations = Reservation::where('user_id', $user->id)->get();
+
         $favoriteIds = $user->favorites->pluck('shop_id');
         $favoriteShops = Shop::with('area', 'genre')
         ->whereIn('id', $favoriteIds)
         ->get();
-        return view('user.mypage', compact('reservations', 'favoriteShops'));
+
+        $reservations = Reservation::with('shop')
+        ->where('user_id', $user->id)
+        ->get();
+
+        $slotsShopId = [];
+        foreach ($reservations as $reservation) {
+            $shopId = $reservation->shop_id;
+
+            $slots = ReservationSlot::where('shop_id', $shopId)->get();
+            $unique = $slots->unique(fn($slot) => $slot->reserve_start->format('H:i'))->values();
+
+            foreach ($unique as $slot) {
+                $reservedNumber = $slot->reservedNumber();
+                $slot->reserved_number = $reservedNumber;
+                $slot->remaining_number = max(0, $slot->max_number - $reservedNumber);
+            }
+            $slotsShopId[$shopId] = $unique;
+        }
+
+        return view('user.mypage', compact('reservations', 'favoriteShops', 'slotsShopId'));
     }
 
     public function update(ReservationRequest $request, $reservationId)
     {
-        $reservation = Reservation::find($reservationId);
-        $data = $request->only(['date,', 'time', 'number']);
-        $update = $reservation->update($data);
+        $reservation = Reservation::with('slot')
+        ->find($reservationId);
+        $shopId = $reservation->shop_id;
+        $date = Carbon::parse($request->date)->format('Y-m-d');
+        $time = $request->time;
+
+        $slot = ReservationSlot::where('shop_id', $shopId)
+        ->where('date', $date)
+        ->where('reserve_start', $time)
+        ->first();
+
+        $update = $reservation->update([
+            'date' => $date,
+            'time' => $time,
+            'number' => $request->number,
+            'reservation_slot_id' => $slot->id,
+        ]);
+
         if ($update) {
             return redirect()->back()->with('success', 'ご予約内容を更新しました');
 
@@ -76,7 +121,7 @@ class UserController extends Controller
             return redirect()->back()->with('success', 'ご予約を削除しました');
 
         } else {
-            return redirect()->back()->with('success', 'ご予約を削除できませんでした');
+            return redirect()->back()->with('fail', 'ご予約を削除できませんでした');
         }
     }
 }

@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Area;
 use App\Models\Genre;
 use App\Models\Shop;
+use App\Models\Reservation;
+use App\Models\ReservationSlot;
 
 class ShopController extends Controller
 {
@@ -17,7 +19,8 @@ class ShopController extends Controller
         $areas = Area::all();
         $genres = Genre::all();
         $favoriteIds = $user ? $user->favorites->pluck('shop_id')->toArray() : [];
-        return view('top', compact('shops', 'areas', 'genres', 'favoriteIds'));
+        $isAuth = Auth::check();
+        return view('top', compact('shops', 'areas', 'genres', 'favoriteIds', 'isAuth'));
     }
 
     public function search(Request $request)
@@ -31,7 +34,8 @@ class ShopController extends Controller
         $areas = Area::all();
         $genres = Genre::all();
         $favoriteIds = $user ? $user->favorites->pluck('shop_id')->toArray() : [];
-        return view('top', compact('shops', 'areas', 'genres', 'favoriteIds'));
+        $isAuth = $user ? true : false;
+        return view('top', compact('shops', 'areas', 'genres', 'favoriteIds', 'isAuth'));
     }
 
 
@@ -40,6 +44,16 @@ class ShopController extends Controller
         $shop = Shop::with('area', 'genre')
         ->where('id', $shopId)
         ->first();
-        return view('user.detail', compact('shop'));
+
+        $slots = ReservationSlot::where('shop_id', $shopId)->get();
+        $unique = $slots->unique(fn($slot) => $slot->reserve_start->format('H:i'))->values();
+
+        foreach ($unique as $slot) {
+            $reservedNumber = $slot->reservedNumber();
+            $slot->reserved_number = $reservedNumber;
+            $slot->remaining_number = max(0, $slot->max_number - $reservedNumber);
+        }
+
+        return view('user.detail', compact('shop', 'unique'));
     }
 }

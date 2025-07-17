@@ -7,11 +7,16 @@
 @section('content')
 @if(session('message'))
 <div class="session">
-    <p class="session__message">
-        {{ session('message') }}
-    </p>
+    <p class="session__message">{{ session('message') }}</p>
 </div>
 @endif
+
+@if(request()->get('message') === 'login_required')
+<div class="session">
+    <p class="session__message">ログインしてください</p>
+</div>
+@endif
+
 <div class="login">
     <div class="login__inner">
         @if (session('login_type') === 'user')
@@ -119,4 +124,8 @@
         @endif
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script src="asset{{ ('js/favorite.js') }}"></script>
 @endsection

@@ -15,8 +15,21 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
+            $path = $request->path();
             session()->flash('message', 'ログインしてください');
-            return route('login');
+
+            if (strpos($path, 'admin') === 0) {
+                session(['login_type' => 'admin']);
+                return '/admin/login';
+
+            } elseif (strpos($path, 'owner') === 0) {
+                session(['login_type' => 'owner']);
+                return 'owner/login';
+
+            } else {
+                session(['login_type' => 'user']);
+                return route('login');
+            }
         }
     }
 }

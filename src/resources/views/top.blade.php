@@ -70,7 +70,7 @@
         $wasFavorite = in_Array($shop->id, $favoriteIds);
         @endphp
         <button class="favorite-button" data-shop-id="{{ $shop->id }}"
-        data-wasFavorite="{{ $wasFavorite ? '1' : '0' }}">
+        data-was-favorite="{{ $wasFavorite ? '1' : '0' }}" data-is-auth="{{ $isAuth ? '1' : '0' }}">
             <img src="{{ asset('icon/heart.png') }}" alt="heart"
             class="favorite-icon {{ $wasFavorite ? 'on' : 'off' }}">
         </button>
@@ -80,5 +80,5 @@
 @endsection
 @section('scripts')
 <script src="{{ asset('js/search_shops.js') }}"></script>
-<script src="{{ asset('js/favorite.js') }}"></script>
+<script src="{{ asset('js/user/favorite.js') }}"></script>
 @endsection

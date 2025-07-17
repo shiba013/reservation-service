@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\OwnerController;
+use App\Http\Controllers\ExportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,10 +49,25 @@ Route::middleware('auth', 'role:2')->group(function () {
     Route::controller(OwnerController::class)->group(function () {
         Route::get('/owner', 'shopList');
         Route::get('/owner/search', 'search');
-        Route::get('/owner/reserve', 'reserveList');
+        Route::get('/owner/reserve/{shop_id}', 'reserveList');
+        Route::post('/owner/reserve/setting/{shop_id}', 'setting');
+        Route::post('/owner/reserve/stop/{shop_id}', 'stop');
+        Route::patch('/owner/reserve/update/{reservation_id}', 'update');
+        Route::delete('/owner/reserve/delete/{reservation_id}', 'destroy');
         Route::get('/owner/detail/{shop_id}', 'detail');
         Route::patch('/owner/edit/{shop_id}', 'edit');
         Route::get('/owner/create', 'newShop');
         Route::post('/owner/create', 'create');
+    });
+});
+
+
+Route::controller(ExportController::class)->group(function () {
+    Route::middleware('auth', 'role:2,3')->group(function () {
+        Route::post('owner/export/shop/list', 'exportShop');
+        Route::post('/owner/export/reserve/list', 'exportReserve');
+    });
+    Route::middleware('auth', 'role:3')->group(function () {
+        Route::post('');
     });
 });

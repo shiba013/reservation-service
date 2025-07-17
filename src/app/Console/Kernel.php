@@ -15,7 +15,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $reservationSlots->command('generate:reservation-slots')
+        ->monthlyOn(1, '08:00')
+        ->withoutOverlapping();
     }
 
     /**

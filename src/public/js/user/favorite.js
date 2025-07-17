@@ -1,11 +1,17 @@
-//お気に入り登録
 document.addEventListener('DOMContentLoaded', function () {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     document.querySelectorAll('.favorite-button').forEach(button => {
-        button.addEventListener('click', async function () {
+        button.addEventListener('click', async function (event) {
+            event.preventDefault();
             const shopId = this.dataset.shopId;
             const wasFavorite = this.dataset.wasFavorite === '1';
             const img = this.querySelector('img');
+            const isAuth = this.dataset.isAuth === '1';
+
+            if (!isAuth) {
+                window.location.href = '/login?message=login_required';
+                return;
+            }
 
             try {
                 const response = await fetch('/favorite/' + shopId, {
@@ -27,6 +33,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.dataset.wasFavorite = '0';
                     img.classList.remove('on');
                     img.classList.add('off');
+
+                    const card = this.closest('.favorite-card');
+                    if (card) {
+                        card.remove();
+                    }
                 }
             } catch (err) {
                 console.error('通信エラー', err);

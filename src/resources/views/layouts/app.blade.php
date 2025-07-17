@@ -48,6 +48,10 @@
                     <a href="/owner" class="menu__link">店舗代表者用ページへ</a>
                     <a href="/admin/email" class="menu__link">メール配信</a>
                     <a href="/admin/login" class="menu__link">ログイン</a>
+                    @else
+                    <a href="/" class="menu__link">ホーム</a>
+                    <a href="/register" class="menu__link">新規会員登録</a>
+                    <a href="/login" class="menu__link">ログイン</a>
                     @endif
                 </div>
             </div>

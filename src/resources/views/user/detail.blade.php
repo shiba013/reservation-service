@@ -39,8 +39,12 @@
             <div class="reserve-form__group">
                 <select name="time" id="selectTime" class="reserve-form__select">
                     <option value="" hidden>時間を選択してください</option>
-                    <option value="17:00">17:00</option>
-                    <option value="18:00">18:00</option>
+                    @foreach ($unique as $slot)
+                    <option value="{{ $slot->reserve_start->format('H:i') }}"
+                    data-remaining="{{ $slot->remaining_number }}">
+                        {{ $slot->reserve_start->format('H:i') }}
+                    </option>
+                    @endforeach
                 </select>
                 @error('time')
                 <p class="alert">{{ $message }}</p>
@@ -49,8 +53,6 @@
             <div class="reserve-form__group">
                 <select name="number" id="selectNumber" class="reserve-form__select">
                     <option value="" hidden>人数を選択してください</option>
-                    <option value="1">1人</option>
-                    <option value="2">2人</option>
                 </select>
                 @error('number')
                 <p class="alert">{{ $message }}</p>
@@ -82,5 +84,5 @@
 </div>
 @endsection
 @section('scripts')
-<script src="{{ asset('js/reflection.js') }}"></script>
+<script src="{{ asset('js/user/reflection.js') }}"></script>
 @endsection

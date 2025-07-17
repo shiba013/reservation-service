@@ -64,9 +64,9 @@
 <div class="shop-list">
     <h2 class="shop-list__title">店舗一覧</h2>
     <div class="shop-list__group">
-        <form action="" method="post" class="export-form">
+        <form action="/owner/export/shop/list" method="post" class="export-form">
             @csrf
-            <input type="hidden" name="data" value="">
+            <input type="hidden" name="shop-data" value="">
             <input type="submit" value="CSV出力" class="export-form__btn">
         </form>
         <div class="paginate">
@@ -90,7 +90,7 @@
                 <td class="table-data">{{ $shop->genre->genre }}</td>
                 <td class="table-data"></td>
                 <td class="table-data">
-                    <a href="/owner/reserve" class="table__link">予約一覧</a>
+                    <a href="/owner/reserve/{{ $shop->id }}" class="table__link">予約一覧</a>
                 </td>
                 <td class="table-data">
                     <a href="/owner/detail/{{ $shop->id }}" class="table__link">詳細</a>

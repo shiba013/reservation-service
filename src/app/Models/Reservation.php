@@ -13,6 +13,7 @@ class Reservation extends Model
     protected $fillable = [
         'user_id',
         'shop_id',
+        'reservation_slot_id',
         'date',
         'time',
         'number',
@@ -40,6 +41,11 @@ class Reservation extends Model
     public function shop()
     {
         return $this->belongsTo(Shop::class);
+    }
+
+    public function slot()
+    {
+        return $this->belongsTo(ReservationSlot::class, 'reservation_slot_id');
     }
 
     public function review()
