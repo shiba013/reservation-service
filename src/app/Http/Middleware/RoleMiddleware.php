@@ -22,6 +22,7 @@ class RoleMiddleware
         }
 
         $user = Auth::user();
+        $role = $user->role;
         $allow = explode(',', $role);
 
         if (!in_array((string)$user->role, $allow)) {

@@ -1,3 +1,79 @@
+//店舗代表者予約受付時間設定フォーム スロット切り替え
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleButtons = document.querySelectorAll('.toggle-btn');
+    const offButton = document.getElementById('turn-off-all');
+    const onButton = document.getElementById('turn-on-all');
+
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            toggleSlot(button);
+        });
+
+        const slotRow = button.closest('.slot__row');
+        const hiddenInput = slotRow.querySelector('.slot-status');
+        if (hiddenInput.value === 1 || hiddenInput.value === '1') {
+            setSlotToOn(button);
+        } else {
+            setSlotToOff(button);
+        }
+    });
+
+    if (offButton) {
+        offButton.addEventListener('click', () => {
+            toggleButtons.forEach(button => {
+                setSlotToOff(button);
+            });
+        });
+    }
+    if (onButton) {
+        onButton.addEventListener('click', () => {
+            toggleButtons.forEach(button => {
+                setSlotToOn(button);
+            });
+        });
+    }
+    function toggleSlot(button) {
+        if (button.classList.contains('on')) {
+            setSlotToOff(button);
+        } else {
+            setSlotToOn(button);
+        }
+    }
+    function setSlotToOff(button) {
+        const slotRow = button.closest('.slot__row');
+        const hiddenInput = slotRow.querySelector('.slot-status');
+
+        button.classList.remove('on');
+        button.textContent = '停止';
+        hiddenInput.value = 0;
+    }
+
+    function setSlotToOn(button) {
+        const slotRow = button.closest('.slot__row');
+        const hiddenInput = slotRow.querySelector('.slot-status');
+
+        button.classList.add('on');
+        button.textContent = '受付';
+        hiddenInput.value = 1;
+    }
+
+    //店舗代表者予約受付時間設定フォーム表示
+    window.openSettingForm = function () {
+        const overlay = document.getElementById('overlay-setting');
+        const settingForm = document.getElementById('setting-form');
+        overlay.style.display = 'flex';
+        settingForm.style.display = 'block';
+    }
+
+    //店舗代表者予約受付時間設定フォーム非表示
+    window.closeSettingForm = function () {
+        const overlay = document.getElementById('overlay-setting');
+        const settingForm = document.getElementById('setting-form');
+        overlay.style.display = 'none';
+        settingForm.style.display = 'none';
+    }
+});
+
 //店舗代表者予約更新フォーム表示
 window.openOwnerUpdateForm = function (reservationId) {
     const date = document.querySelector(`#update-form${reservationId} input[name='date']`).value;
@@ -45,36 +121,4 @@ window.closeOwnerDeleteForm = function (reservationId) {
     const deleteForm = document.getElementById('delete-form' + reservationId);
     overlay.style.display = 'none';
     deleteForm.style.display = 'none';
-}
-
-//店舗代表者予約受付時間設定フォーム表示
-window.openSettingForm = function () {
-    const overlay = document.getElementById('overlay-setting');
-    const settingForm = document.getElementById('setting-form');
-    overlay.style.display = 'flex';
-    settingForm.style.display = 'block';
-}
-
-//店舗代表者予約受付時間設定フォーム非表示
-window.closeSettingForm = function () {
-    const overlay = document.getElementById('overlay-setting');
-    const settingForm = document.getElementById('setting-form');
-    overlay.style.display = 'none';
-    settingForm.style.display = 'none';
-}
-
-//店舗代表者予約停止フォーム表示
-window.openStopForm = function (shopId) {
-    const overlay = document.getElementById('overlay-stop' + shopId);
-    const stopForm = document.getElementById('stop-form' + shopId);
-    overlay.style.display = 'flex';
-    stopForm.style.display = 'block';
-}
-
-//店舗代表者予約停止フォーム非表示
-window.closeStopForm = function (shopId) {
-    const overlay = document.getElementById('overlay-stop' + shopId);
-    const stopForm = document.getElementById('stop-form' + shopId);
-    overlay.style.display = 'none';
-    stopForm.style.display = 'none';
 }

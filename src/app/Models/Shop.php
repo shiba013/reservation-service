@@ -38,7 +38,7 @@ class Shop extends Model
 
     public function setEndTimeAttribute($value)
     {
-        $this->attributes['emd_time'] = Carbon::parse($value)->format('H:i');
+        $this->attributes['end_time'] = Carbon::parse($value)->format('H:i');
     }
 
     public function area()

@@ -5,17 +5,25 @@
 @endsection
 
 @section('header')
-<form action="/owner/reserve/{{ $shop->id }}" method="get" class="date__search-form">
-    <label for="date" class="calendar__label">
-        <img src="{{ asset('icon/calendar.svg') }}" alt="カレンダー" class="calendar__img">
-        日付検索
-    </label>
-    <input type="date" name="date" id="date" class="calendar__input" value="{{ request('date') }}">
-    <a href="/owner/reserve/{{ $shop->id }}?date={{ Carbon\Carbon::today()->format('Y-m-d') }}" class="today-link">
+<div class="reserve-list__header">
+    <form action="/owner/reserve/{{ $shop->id }}" method="get" class="date__search-form">
+        <label for="date" class="calendar__label">
+            <img src="{{ asset('icon/calendar.svg') }}" alt="カレンダー" class="calendar__img">
+            日付検索
+        </label>
+        <input type="date" name="date" id="date" class="calendar__input" value="{{ request('date') }}">
+        <a href="/owner/reserve/{{ $shop->id }}?date={{ Carbon\Carbon::today()->format('Y-m-d') }}" class="today-link">
             <img src="{{ asset('icon/calendar.svg') }}" alt="カレンダー" class="calendar__img">
             本日の予約
-    </a>
-</form>
+        </a>
+    </form>
+    <div class="time-setting">
+        <button type="button" class="set-btn" onclick="openSettingForm()">
+            <img src="{{ asset('icon/setting.svg') }}" alt="設定ボタン" class="setting__img">
+            受付時間設定
+        </button>
+    </div>
+</div>
 @endsection
 
 @section('content')
@@ -42,15 +50,11 @@
             </a>
             <h2 class="shop-name">{{ $shop->name }}</h2>
         </div>
-        <div class="setting-btn">
-            <button class="set-btn" onclick="openSettingForm()">受付時間設定</button>
-            <button class="stop-btn" onclick="openStopForm({{ $shop->id }})">予約停止</button>
-        </div>
     </div>
     <div class="reserve-list__group">
-        <form action="/owner/export/reserve/list" method="post" class="export-form">
+        <form action="/owner/export/reserve/list/{{ $shop->id }}" method="post" class="export-form">
             @csrf
-            <input type="hidden" name="reserve-data" value="">
+            <input type="hidden" name="date" value="{{ request('date') }}">
             <input type="submit" value="CSV出力" class="export-btn">
         </form>
         <div class="paginate">
@@ -74,7 +78,7 @@
                 <th class="table-title">時間</th>
                 <th class="table-title">予約名</th>
                 <th class="table-title">人数</th>
-                <th class="table-title">修正</th>
+                <th class="table-title">詳細</th>
             </tr>
             @foreach ($reservations as $reservation)
             <tr class="reserve-table__row">
@@ -82,7 +86,7 @@
                 <td class="table-data">{{ $reservation->user->name }}</td>
                 <td class="table-data">{{ $reservation->number }}人</td>
                 <td class="table-data">
-                    <button type="button" class="reserve-update" onclick="openOwnerUpdateForm({{ $reservation->id }})">変更</button>
+                    <button type="button" class="reserve-update" onclick="openOwnerUpdateForm({{ $reservation->id }})">詳細</button>
                     <button type="button" class="reserve-delete" onclick="openOwnerDeleteForm({{ $reservation->id }})">削除</button>
                 </td>
             </tr>
@@ -96,28 +100,30 @@
     <div class="setting" id="setting-form">
         <form action="/owner/reserve/setting/{{ $shop->id }}" method="post" class="setting-form">
             @csrf
-            <div class="setting-form__group"></div>
+            <input type="hidden" name="date" value="{{ request('date') }}">
+            <div class="setting-form__group">
+                <p class="setting-message">{{ $todayFormat }} の個別受付設定</p>
+            </div>
+            <div class="setting-form__group">
+                @foreach ($slots as $slot)
+                <div class="slot__row" data-slot-id="{{ $slot->id }}">
+                    <p class="setting-time">{{ $slot->reserve_start->format('H:i') }}</p>
+                    <input type="hidden" name="slots[{{ $slot->id }}]"
+                    value="{{ $slot->is_active ? 1 : 0 }}" class="slot-status">
+                    <button type="button" class="toggle-btn">受付</button>
+                </div>
+                @endforeach
+            </div>
+            <div class="setting-form__group">
+                <p class="setting-message">受付一括設定</p>
+                <div class="setting-form__btn">
+                    <button type="button" class="stop-btn" id="turn-off-all">一括停止</button>
+                    <button type="button" class="start-btn" id="turn-on-all">一括受付</button>
+                </div>
+            </div>
             <div class="setting-form__group">
                 <input type="button" value="キャンセル" class="form-btn__cancel" onclick="closeSettingForm()">
                 <input type="submit" value="設定する" class="form-btn__action">
-            </div>
-        </form>
-    </div>
-</div>
-
-<!--予約停止フォーム-->
-<div class="overlay" id="overlay-stop{{ $shop->id }}">
-    <div class="stop"id="stop-form{{ $shop->id }}">
-        <form action="/owner/reserve/stop/{{ $shop->id }}" method="post" class="stop-form">
-            @csrf
-            <input type="hidden" name="date" value="{{ request('date') }}">
-            <div class="stop-form__group">
-                <p class="stop-message">{{ $todayFormat }}の予約を停止しますか？</p>
-            </div>
-            <div class="stop-form__group">
-                <input type="button" value="キャンセル" class="form-btn__cancel"
-                onclick="closeStopForm({{ $shop->id }})">
-                <input type="submit" value="予約停止する" class="form-btn__action">
             </div>
         </form>
     </div>
@@ -131,7 +137,7 @@
             @csrf
             @method('PATCH')
             <div class="update-form__group">
-                <p class="update-message">予約内容変更</p>
+                <p class="update-message">予約内容詳細</p>
             </div>
             <div class="update-form__group">
                 <p class="update-message">{{ $reservation->user->name }}様</p>
@@ -161,7 +167,7 @@
                             id ="update-time{{ $reservation->id }}"
                             value="{{ old('time', $reservation->time->format('H:i')) }}">
                             @error('time')
-                            <p class="alert" id ="error-time-{{ $reservation->id }}">{{ $message }}</p>
+                            <p class="alert" id="error-time-{{ $reservation->id }}">{{ $message }}</p>
                             @enderror
                         </td>
                     </tr>

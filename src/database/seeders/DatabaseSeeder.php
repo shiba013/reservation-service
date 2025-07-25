@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,5 +20,7 @@ class DatabaseSeeder extends Seeder
             GenreSeeder::class,
             ShopSeeder::class,
         ]);
+        User::factory()->count(10)->create();
+        User::factory()->count(10)->state(['role' => 2])->create();
     }
 }

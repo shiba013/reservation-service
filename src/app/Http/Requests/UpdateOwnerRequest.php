@@ -3,8 +3,11 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\Rule;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
-class RegisterRequest extends FormRequest
+class UpdateOwnerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,8 +28,7 @@ class RegisterRequest extends FormRequest
     {
         return [
             'name' => 'required |string |max:191',
-            'email' => 'required |email | max:191',
-            'password' => 'required |min:8 |max:191',
+            'email' => ['required', 'email', 'max:191',Rule::unique('users')->ignore($this->id),],
         ];
     }
 
@@ -38,9 +40,14 @@ class RegisterRequest extends FormRequest
             'email.required' => 'メールアドレスを入力してください',
             'email.email' => 'メールアドレスは、有効なメールアアドレス形式で指定してください',
             'email.max' => 'メールアドレスは191文字以内で入力してください',
-            'password.required' => 'パスワードを入力してください',
-            'password.min' => 'パスワードは8文字以上で入力してください',
-            'password.max' => 'パスワードは191文字以内で入力してください',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(
+            redirect()->back()->withErrors($validator)->withInput()
+            ->with('owner_error_id', $this->input('id'))
+        );
     }
 }

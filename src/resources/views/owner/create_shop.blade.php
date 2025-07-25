@@ -87,5 +87,5 @@
 @endsection
 
 @section('scripts')
-<script src="{{ asset('js/image_preview.js') }}"></script>
+<script src="{{ asset('js/owner/image_preview.js') }}"></script>
 @endsection

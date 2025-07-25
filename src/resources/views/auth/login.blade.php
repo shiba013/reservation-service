@@ -120,12 +120,11 @@
             <div class="login-form__group">
                 <input type="submit" value="ログイン" class="login-form__button">
             </div>
+            <div class="login-form__group--link">
+                <a href="/owner/login" class="link">店舗代表者用ページへ移動</a>
+            </div>
         </form>
         @endif
     </div>
 </div>
-@endsection
-
-@section('scripts')
-<script src="asset{{ ('js/favorite.js') }}"></script>
 @endsection

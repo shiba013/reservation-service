@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 class AuthController extends Controller
 {
@@ -20,6 +21,10 @@ class AuthController extends Controller
         if (Auth::attempt($user)) {
             $request->session()->regenerate();
             $user = Auth::user();
+
+            if (!$user->hasVerifiedEmail()) {
+                $user->sendEmailVerificationNotification();
+            }
             if ($user->role === 2 || $user->role === 3) {
                 return redirect('/owner');
             } else {
@@ -46,11 +51,15 @@ class AuthController extends Controller
         if (Auth::attempt($user)) {
             $request->session()->regenerate();
             $user = Auth::user();
+
+            if (!$user->hasVerifiedEmail()) {
+                $user->sendEmailVerificationNotification();
+            }
             if ($user->role === 3) {
                 return redirect('/admin');
             } else {
                 Auth::logout();
-                return back()->withError([
+                return back()->withErrors([
                     'email' => '管理者としての権限が必要です',
                 ])->withInput();
             }
@@ -79,5 +88,47 @@ class AuthController extends Controller
         } elseif ($loginType === 'admin') {
             return redirect('/admin/login');
         }
+    }
+
+    public function email(Request $request)
+    {
+        $user = Auth::user();
+        return view('auth.verify-email', compact('user'));
+    }
+
+    public function verification(EmailVerificationRequest $request)
+    {
+        $request->fulfill();
+        $loginType = session('login_type');
+
+        if ($loginType === 'user') {
+            return redirect('/thanks');
+
+        } elseif ($loginType === 'owner') {
+            return redirect('/owner');
+
+        } elseif ($loginType === 'admin') {
+            return redirect('/admin');
+        }
+    }
+
+    public function resend(Request $request)
+    {
+        $loginType = session('login_type');
+
+        if ($request->user()->hasVerifiedEmail()) {
+            if ($loginType === 'user') {
+                return redirect('/thanks');
+
+            } elseif ($loginType === 'owner') {
+                return redirect('/owner');
+
+            } elseif ($loginType === 'admin') {
+                return redirect('/admin');
+            }
+        }
+        $request->user()->sendEmailVerificationNotification();
+
+        return back()->with('status', 'verification-link-sent');
     }
 }

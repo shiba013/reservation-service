@@ -175,6 +175,104 @@ body {
     font-size: 18px;
 }
 
-.table__link {
-    color: #000;
+.table-data:last-of-type {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.table-btn__detail {
+    text-decoration: none;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 18px;
+    background-color: #3f5af2;
+    color: #fff;
+    cursor: pointer;
+}
+
+.delete-btn {
+    width: 150px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 18px;
+    background-color: #3f5af2;
+    color: #fff;
+    cursor: pointer;
+}
+
+.table-btn__delete,
+.cancel-btn {
+    padding: 5px 10px;
+    border: 1px solid #3f5af2;
+    border-radius: 6px;
+    font-size: 18px;
+    background-color: #fff;
+    color: #3f5af2;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    width: 150px;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(3px);
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+}
+
+.delete {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    color: #3f5af2;
+    z-index: 100;
+}
+
+.delete-form__group {
+    width: 100%;
+    text-align: center;
+    padding: 30px 0px 15px;
+}
+
+.delete-form__group:first-of-type {
+    background-color: #3f5af2;
+    color: #fff;
+}
+
+.delete-form__group:last-of-type {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.delete-message {
+    font-size: 22px;
+}
+
+.button {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 20px auto;
 }

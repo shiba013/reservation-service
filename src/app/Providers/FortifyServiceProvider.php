@@ -6,6 +6,8 @@ use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
+use Laravel\Fortify\Contracts\VerifyEmailViewResponse;
+use Laravel\Fortify\Http\Responses\SimpleViewResponse;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -48,6 +50,10 @@ class FortifyServiceProvider extends ServiceProvider
         {
             session(['login_type' => 'user']);
             return view('auth.login');
+        });
+
+        $this->app->singleton(VerifyEmailViewResponse::class, function () {
+            return new SimpleViewResponse('auth.verify-email');
         });
 
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);

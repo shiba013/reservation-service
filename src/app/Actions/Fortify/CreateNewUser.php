@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\RegisterRequest;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
+use Illuminate\Auth\Events\Registered;
 
 class CreateNewUser implements CreatesNewUsers
 {

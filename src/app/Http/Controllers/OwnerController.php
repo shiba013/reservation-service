@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Http\Request;
 use App\Http\Requests\ReservationRequest;
+use App\Http\Requests\ShopRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Area;
 use App\Models\Genre;
@@ -29,6 +30,7 @@ class OwnerController extends Controller
     {
         $user = Auth::user();
         $shops = Shop::with('area', 'genre')
+        ->withCount('favorites')
         ->where('user_id', $user->id)
         ->paginate(5);
         $areas = Area::all();
@@ -65,17 +67,17 @@ class OwnerController extends Controller
         ->first();
         $reservations = Reservation::with('shop', 'user')
         ->where('shop_id', $shopId)
-        ->where('date', $target)
+        ->where('date', $target->format('Y-m-d'))
         ->paginate(5);
-        return view('owner.reserve_list', compact('todayFormat','previousDay', 'nextDay', 'shop', 'reservations'));
+
+        $slots = ReservationSlot::where('shop_id', $shopId)
+        ->where('date', $target->format('Y-m-d'))
+        ->get();
+
+        return view('owner.reserve_list', compact('todayFormat','previousDay', 'nextDay', 'shop', 'reservations', 'slots'));
     }
 
     public function setting(Request $request, $shopId)
-    {
-        //
-    }
-
-    public function stop(Request $request, $shopId)
     {
         $date = $request->input('date');
         $target = $date ? Carbon::parse($date) : Carbon::today();
@@ -84,48 +86,37 @@ class OwnerController extends Controller
         ->where('user_id', $user->id)
         ->first();
 
-        $stops = [];
-        DB::transaction(function () use ($shopId, $target, &$stops) {
-            $reservations = Reservation::where('shop_id', $shopId)
-            ->where('date', $target)
-            ->get();
-
-            $slots = ReservationSlot::where('shop_id', $shopId)
-            ->where('date', $target)
-            ->get();
-
-            ReservationSlot::where('shop_id', $shopId)
-            ->where('date', $target->format('Y-m-d'))
-            ->update(['is_active' => false]);
-
-            if ($reservations->isEmpty()) {
-                return;
-            }
-
-            foreach ($slots as $slot) {
-                $slotReservations = $reservations->filter(function ($reservation) use ($slot) {
-                    return $reservation->time == $slot->reserve_start;
-                });
-                $totalNumber = $slotReservations->sum('number');
-                $totalGroup = $slotReservations->count();
-
-                if ($totalNumber >= $slot->max_number) {
-                    $stops[] = $slot->reserve_start . 'の予約が人数上限に達しています';
-                }
-
-                if ($totalGroup >= $slot->max_group) {
-                    $stops[] = $slot->reserve_start . 'の予約が組数上限に達しています';
-                }
+        $slots = $request->input('slots', []);
+        DB::transaction(function () use ($slots, $shopId, $target) {
+            foreach ($slots as $slotId => $isActive) {
+                ReservationSlot::where('id', $slotId)
+                ->where('shop_id', $shopId)
+                ->where('date', $target->format('Y-m-d'))
+                ->update(['is_active' => (bool)$isActive]);
             }
         });
-        return redirect()->back()->with('success', '本日の予約を停止しました');
+        return redirect()->back()->with('success', '本日の受付設定を変更しました');
     }
 
     public function update(ReservationRequest $request, $reservationId)
     {
-        $reservation = Reservation::with('shop')->find($reservationId);
-        $data = $request->only(['date', 'time', 'number']);
-        $update = $reservation->update($data);
+        $reservation = Reservation::with('slot')
+        ->find($reservationId);
+        $shopId = $reservation->shop_id;
+        $date = Carbon::parse($request->date)->format('Y-m-d');
+        $time = Carbon::parse($request->time)->format('H:i:s');
+
+        $slot = ReservationSlot::where('shop_id', $shopId)
+        ->where('date', $date)
+        ->where('reserve_start', $time)
+        ->first();
+
+        $update = $reservation->update([
+            'date' => $date,
+            'time' => $time,
+            'number' => $request->number,
+            'reservation_slot_id' => $slot->id,
+        ]);
         if ($update) {
             return redirect()->back()->with('success', '変更が完了しました');
 
@@ -154,7 +145,7 @@ class OwnerController extends Controller
         return view('owner.detail', compact('shop'));
     }
 
-    public function edit(Request $request, $shopId)
+    public function edit(ShopRequest $request, $shopId)
     {
         $shop = Shop::find($shopId);
         $area = Area::firstOrCreate(['area' => $request->area]);
@@ -186,7 +177,7 @@ class OwnerController extends Controller
             'start_time' => $request->start_time,
             'end_time' => $request->end_time,
         ]);
-        return redirect('/owner')->with('success', '店舗情報の更新が完了しました');
+        return redirect('/owner')->with('success', '店舗情報を変更しました');
     }
 
     public function newShop()
@@ -195,7 +186,7 @@ class OwnerController extends Controller
         return view('owner.create_shop');
     }
 
-    public function create(Request $request)
+    public function create(ShopRequest $request)
     {
         $shop = DB::transaction(function () use ($request)
         {
@@ -222,7 +213,7 @@ class OwnerController extends Controller
                 'image' => 'storage/images/' . $fileName,
                 'overview' => $request->overview,
                 'start_time' => $request->start_time,
-                'end_time' => $request->end_time
+                'end_time' => $request->end_time,
             ]);
             return $shop;
         });
