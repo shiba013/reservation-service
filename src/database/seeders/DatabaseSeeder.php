@@ -22,5 +22,7 @@ class DatabaseSeeder extends Seeder
         ]);
         User::factory()->count(10)->create();
         User::factory()->count(10)->state(['role' => 2])->create();
+
+        $this->call(ReservationSeeder::class);
     }
 }

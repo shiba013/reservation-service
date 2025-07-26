@@ -18,6 +18,9 @@ class Kernel extends ConsoleKernel
         $reservationSlots->command('generate:reservation-slots')
         ->monthlyOn(1, '08:00')
         ->withoutOverlapping();
+
+        $remainderMails->command('remainder:send')
+        ->dailyAt('09:00');
     }
 
     /**
