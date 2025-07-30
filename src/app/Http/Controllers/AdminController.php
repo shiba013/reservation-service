@@ -70,6 +70,8 @@ class AdminController extends Controller
     {
         $shops = Shop::with('user', 'area', 'genre')
         ->withCount('favorites')
+        ->withAvg('reviews', 'evaluation')
+        ->withCount('reviews')
         ->paginate(5);
         $areas = Area::all();
         $genres = Genre::all();
@@ -79,6 +81,9 @@ class AdminController extends Controller
     public function shopSearch(Request $request)
     {
         $shops = Shop::with('user', 'area', 'genre')
+        ->withCount('favorites')
+        ->withAvg('reviews', 'evaluation')
+        ->withCount('reviews')
         ->AreaSearch($request->area)
         ->GenreSearch($request->genre)
         ->KeywordSearch($request->keyword)

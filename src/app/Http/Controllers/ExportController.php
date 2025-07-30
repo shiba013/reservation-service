@@ -18,10 +18,11 @@ class ExportController extends Controller
         $user = Auth::user();
         $shops = Shop::with('area', 'genre')
         ->withCount('favorites')
+        ->withAvg('reviews', 'evaluation')
         ->where('user_id', $user->id)
         ->get();
 
-        $columns = ['店名', 'エリア', 'ジャンル', '概要', '営業開始時間', '営業終了時間', 'お気に入り登録者数'];
+        $columns = ['店名', 'エリア', 'ジャンル', '概要', '営業開始時間', '営業終了時間', 'お気に入り登録者数', '評価平均'];
 
         $response = new StreamedResponse(function () use ($shops, $columns) {
             $file = fopen('php://output', 'w');
@@ -37,6 +38,7 @@ class ExportController extends Controller
                     $shop->start_time->format('H:i'),
                     $shop->end_time->format('H:i'),
                     $shop->favorites_count,
+                    number_format($shop->reviews_avg_evaluation, 1)
                 ];
                 mb_convert_variables('SJIS-win', 'UTF-8', $row);
                 fputcsv($file, $row);
@@ -117,8 +119,9 @@ class ExportController extends Controller
     {
         $shops = Shop::with('area', 'genre')
         ->withCount('favorites')
+        ->withAvg('reviews', 'evaluation')
         ->get();
-        $columns = ['店名', 'エリア', 'ジャンル', '概要', '営業開始時間', '営業終了時間', 'お気に入り登録者数'];
+        $columns = ['店名', 'エリア', 'ジャンル', '概要', '営業開始時間', '営業終了時間', 'お気に入り登録者数', '平均評価'];
 
         $response = new StreamedResponse(function () use ($shops, $columns) {
             $file = fopen('php://output', 'w');
@@ -134,6 +137,7 @@ class ExportController extends Controller
                     $shop->start_time->format('H:i'),
                     $shop->end_time->format('H:i'),
                     $shop->favorites_count,
+                    number_format($shop->review_avg_evaluation, 1),
                 ];
                 mb_convert_variables('SJIS-win', 'UTF-8', $row);
                 fputcsv($file, $row);

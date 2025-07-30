@@ -175,6 +175,11 @@ body {
     font-size: 18px;
 }
 
+.table-data__span {
+    font-size: 14px;
+    color: #5f5f5f;
+}
+
 .table__link {
     color: #000;
 }

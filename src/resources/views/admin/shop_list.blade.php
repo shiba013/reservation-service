@@ -82,6 +82,7 @@
                 <th class="table-title">エリア</th>
                 <th class="table-title">ジャンル</th>
                 <th class="table-title">お気に入り<br>登録者数</th>
+                <th class="table-title">評価平均</th>
                 <th class="table-title">詳細</th>
             </tr>
             @foreach ($shops as $shop)
@@ -90,6 +91,10 @@
                 <td class="table-data">{{ $shop->area->area }}</td>
                 <td class="table-data">{{ $shop->genre->genre }}</td>
                 <td class="table-data">{{ $shop->favorites->count() }}</td>
+                <td class="table-data">
+                    {{ number_format($shop->reviews_avg_evaluation, 1) }}点<br>
+                    <span class="table-data__span">（{{ $shop->reviews->count() }}）</span>
+                </td>
                 <td class="table-data">
                     <a href="/admin/shop/detail/{{ $shop->id }}" class="table-btn__detail">詳細</a>
                     <button type="button" class="table-btn__delete" onclick="openShopDelete({{ $shop->id }})">削除</button>

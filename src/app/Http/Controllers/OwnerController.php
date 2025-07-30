@@ -31,6 +31,8 @@ class OwnerController extends Controller
         $user = Auth::user();
         $shops = Shop::with('area', 'genre')
         ->withCount('favorites')
+        ->withAvg('reviews', 'evaluation')
+        ->withCount('reviews')
         ->where('user_id', $user->id)
         ->paginate(5);
         $areas = Area::all();
@@ -42,6 +44,9 @@ class OwnerController extends Controller
     {
         $user = Auth::user();
         $shops = Shop::with('area', 'genre')
+        ->withCount('favorites')
+        ->withAvg('reviews', 'evaluation')
+        ->withCount('reviews')
         ->AreaSearch($request->area)
         ->GenreSearch($request->genre)
         ->KeywordSearch($request->keyword)

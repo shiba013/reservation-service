@@ -82,6 +82,7 @@
                 <th class="table-title">エリア</th>
                 <th class="table-title">ジャンル</th>
                 <th class="table-title">お気に入り<br>登録者数</th>
+                <th class="table-title">評価平均</th>
                 <th class="table-title">予約一覧</th>
                 <th class="table-title">詳細</th>
             </tr>
@@ -91,6 +92,10 @@
                 <td class="table-data">{{ $shop->area->area }}</td>
                 <td class="table-data">{{ $shop->genre->genre }}</td>
                 <td class="table-data">{{ $shop->favorites->count() }}</td>
+                <td class="table-data">
+                    {{ number_format($shop->reviews_avg_evaluation, 1) }}点<br>
+                    <span class="table-data__span">（{{ $shop->reviews->count() }}）</span>
+                </td>
                 <td class="table-data">
                     <a href="/owner/reserve/{{ $shop->id }}" class="table__link">予約一覧</a>
                 </td>
