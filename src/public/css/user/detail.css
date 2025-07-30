@@ -52,6 +52,16 @@ body {
     line-height: 1.2em;
 }
 
+.shop-info-a {
+    text-decoration: none;
+    margin: 0px auto;
+    padding: 10px 20px;
+    border-radius: 4px;
+    background-color: #3f5af2;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    color: #fff;
+}
+
 .reserve {
     height: 95%;
     padding-right: 60px;

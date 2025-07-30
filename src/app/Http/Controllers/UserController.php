@@ -12,6 +12,7 @@ use App\Models\Shop;
 use App\Models\Favorite;
 use App\Models\Reservation;
 use App\Models\ReservationSlot;
+use App\Models\Review;
 use Illuminate\Support\Carbon;
 
 class UserController extends Controller
@@ -85,7 +86,7 @@ class UserController extends Controller
         return view('user.mypage', compact('reservations', 'favoriteShops', 'slotsShopId'));
     }
 
-    public function update(ReservationRequest $request, $reservationId)
+    public function reserveUpdate(ReservationRequest $request, $reservationId)
     {
         $reservation = Reservation::with('slot')
         ->find($reservationId);
@@ -113,7 +114,7 @@ class UserController extends Controller
         }
     }
 
-    public function destroy(Request $request, $reservationId)
+    public function reserveDestroy(Request $request, $reservationId)
     {
         $reservation = Reservation::find($reservationId);
         $delete = $reservation->delete();
@@ -122,6 +123,39 @@ class UserController extends Controller
 
         } else {
             return redirect()->back()->with('fail', 'ご予約を削除できませんでした');
+        }
+    }
+
+    public function reviewCreate(Request $request, $shopId)
+    {
+        Review::create([
+            'user_id' => auth()->id(),
+            'shop_id' => $shopId,
+            'evaluation' => $request->evaluation,
+            'comment' => $request->comment,
+        ]);
+        session()->flash('success', '口コミを投稿しました');
+        return response()->json(['status' => 'success']);
+    }
+
+    public function reviewUpdate(Request $request)
+    {
+        $review = Review::find($request->id);
+        $update = $review->update([
+            'evaluation' => $request->evaluation,
+            'comment' => $request->comment,
+        ]);
+        session()->flash('success', '口コミ内容を変更しました');
+        return response()->json(['status' => 'success']);
+    }
+
+    public function reviewDestroy(Request $request)
+    {
+        $delete = Review::find($request->id)->delete();
+        if ($delete) {
+            return redirect()->back()->with('success', '口コミを削除しました');
+        } else {
+            return redirect()->back()->with('fail', '口コミを削除できませんでした');
         }
     }
 }

@@ -273,3 +273,14 @@ body {
     font-weight: bold;
     color: #ff0000;
 }
+
+@media screen and (max-width: 1000px) {
+    .table-data {
+        font-size: 14px;
+    }
+
+    .table-btn__update,
+    .table-btn__delete {
+        font-size: 14px;
+    }
+}

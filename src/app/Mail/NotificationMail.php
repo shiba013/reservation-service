@@ -6,9 +6,8 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Reservation;
 
-class ReminderMail extends Mailable
+class NotificationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -17,11 +16,13 @@ class ReminderMail extends Mailable
      *
      * @return void
      */
-    public $reservation;
+    public $subject;
+    public $body;
 
-    public function __construct(Reservation $reservation)
+    public function __construct($subject, $body)
     {
-        $this->reservation = $reservation;
+        $this->subject = $subject;
+        $this->body = $body;
     }
 
     /**
@@ -31,7 +32,7 @@ class ReminderMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('(リマインド) ご予約日は本日です')
-        ->view('mails.reminder');
+        return $this->subject($this->subject)
+        ->view('mails.notification');
     }
 }

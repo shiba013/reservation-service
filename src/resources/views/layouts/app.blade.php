@@ -24,12 +24,12 @@
                         @elseif (session('login_type') === 'owner')
                         <a href="/owner" class="menu__link">ホーム</a>
                         <a href="/owner/create" class="menu__link">新規店舗登録</a>
-                        <a href="/owner/email" class="menu__link">メール配信</a>
+                        <a href="/owner/mail" class="menu__link">メール配信</a>
                         @elseif (session('login_type') === 'admin')
                         <a href="/admin" class="menu__link">ホーム</a>
                         <a href="/admin/register" class="menu__link">新規店舗代表者登録</a>
                         <a href="/admin/shop" class="menu__link">店舗一覧</a>
-                        <a href="/admin/email" class="menu__link">メール配信</a>
+                        <a href="/admin/mail" class="menu__link">メール配信</a>
                         @endif
                         <form action="/logout" method="post" class="logout">
                             @csrf
@@ -42,13 +42,13 @@
                     @elseif (session('login_type') === 'owner')
                     <a href="/" class="menu__link">ホーム</a>
                     <a href="/owner/create" class="menu__link">新規店舗登録</a>
-                    <a href="/owner/email" class="menu__link">メール配信</a>
+                    <a href="/owner/mail" class="menu__link">メール配信</a>
                     <a href="/owner/login" class="menu__link">ログイン</a>
                     @elseif (session('login_type') === 'admin')
                     <a href="/" class="menu__link">ホーム</a>
                     <a href="/admin/register" class="menu__link">新規店舗代表者登録</a>
                     <a href="/admin/shop" class="menu__link">店舗一覧</a>
-                    <a href="/admin/email" class="menu__link">メール配信</a>
+                    <a href="/admin/mail" class="menu__link">メール配信</a>
                     <a href="/admin/login" class="menu__link">ログイン</a>
                     @else
                     <a href="/" class="menu__link">ホーム</a>

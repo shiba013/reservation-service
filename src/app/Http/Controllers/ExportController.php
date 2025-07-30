@@ -52,12 +52,11 @@ class ExportController extends Controller
     public function exportReserve(Request $request, $shopId)
     {
         $date = $request->input('date');
-        $target = $date ? Carbon::parse($date) : Carbon::now();
+        $target = $date ? Carbon::parse($date)->format('Y-m-d') : Carbon::now()->format('Y-m-d');
         $reservations = Reservation::with('shop', 'user')
         ->where('shop_id', $shopId)
         ->where('date', $target)
         ->get();
-
         $shop = Shop::where('id', $shopId)->first();
 
         $columns = ['日付', '予約時間', '予約名', '人数'];
@@ -114,8 +113,36 @@ class ExportController extends Controller
         return $response;
     }
 
-    public function exportShopList()
+    public function exportShopList(Request $request)
     {
-        //
+        $shops = Shop::with('area', 'genre')
+        ->withCount('favorites')
+        ->get();
+        $columns = ['店名', 'エリア', 'ジャンル', '概要', '営業開始時間', '営業終了時間', 'お気に入り登録者数'];
+
+        $response = new StreamedResponse(function () use ($shops, $columns) {
+            $file = fopen('php://output', 'w');
+            mb_convert_variables('SJIS-win', 'UTF-8', $columns);
+            fputcsv($file, $columns);
+
+            foreach ($shops as $shop) {
+                $row = [
+                    $shop->name,
+                    $shop->area->area,
+                    $shop->genre->genre,
+                    $shop->overview,
+                    $shop->start_time->format('H:i'),
+                    $shop->end_time->format('H:i'),
+                    $shop->favorites_count,
+                ];
+                mb_convert_variables('SJIS-win', 'UTF-8', $row);
+                fputcsv($file, $row);
+            }
+            fclose($file);
+        });
+        $fileName = rawurlencode('shop-list.csv');
+        $response->headers->set('Content-Type', 'text/csv; charset=Shift_JIS');
+        $response->headers->set('Content-Disposition', "attachment; filename={$fileName}");
+        return $response;
     }
 }

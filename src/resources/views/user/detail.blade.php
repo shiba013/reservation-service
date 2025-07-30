@@ -23,6 +23,9 @@
         <div class="shop-info__group">
             <p class="shop-info__p">{{ $shop->overview }}</p>
         </div>
+        <div class="shop-info__group">
+            <a href="/review/{{ $shop->id }}" class="shop-info-a">口コミを表示する</a>
+        </div>
     </section>
     <section class="reserve">
         <form action="/detail/{{ $shop->id }}" method="post" class="reserve-form">

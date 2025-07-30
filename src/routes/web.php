@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,8 @@ Route::controller(ShopController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('/search', 'search');
     Route::get('/detail/{shop_id}', 'detail');
+    route::get('/review/{shop_id}', 'review');
+    Route::get('/review/sort/{shop_id}', 'sort');
 });
 
 Route::middleware('auth','verified')->group(function () {
@@ -48,8 +51,11 @@ Route::middleware('auth','verified')->group(function () {
         Route::view('/done', 'user.done');
         Route::post('/favorite/{shop_id}', 'favorite');
         Route::get('/mypage', 'mypage');
-        Route::patch('/reserve/update/{reservation_id}', 'update');
-        Route::delete('/reserve/delete/{reservation_id}', 'destroy');
+        Route::patch('/reserve/update/{reservation_id}', 'reserveUpdate');
+        Route::delete('/reserve/delete/{reservation_id}', 'reserveDestroy');
+        Route::post('/review/{shop_id}', 'reviewCreate');
+        Route::patch('/review/update', 'reviewUpdate');
+        Route::delete('/review/delete', 'reviewDestroy');
     });
 });
 
@@ -65,6 +71,14 @@ Route::middleware('auth', 'verified', 'role:2,3')->group(function () {
         Route::patch('/owner/edit/{shop_id}', 'edit');
         Route::get('/owner/create', 'newShop');
         Route::post('/owner/create', 'create');
+    });
+    Route::controller(ExportController::class)->group(function () {
+        Route::post('/owner/export/shop/list', 'exportShop');
+        Route::post('/owner/export/reserve/list/{shop_id}', 'exportReserve');
+    });
+    Route::controller(NotificationController::class)->group(function () {
+        Route::get('/owner/mail', 'ownerMail');
+        Route::post('/owner/mail', 'ownerSend');
     });
 });
 
@@ -82,16 +96,12 @@ Route::middleware('auth', 'verified', 'role:3')->group(function () {
         Route::get('/admin/shop/detail/{shop_id}', 'shopDetail');
         Route::patch('/admin/shop/update/{shop_id}', 'shopUpdate');
     });
-});
-
-
-Route::controller(ExportController::class)->group(function () {
-    Route::middleware('auth', 'verified', 'role:2,3')->group(function () {
-        Route::post('owner/export/shop/list', 'exportShop');
-        Route::post('/owner/export/reserve/list/{shop_id}', 'exportReserve');
-    });
-    Route::middleware('auth', 'verified', 'role:3')->group(function () {
+    Route::controller(ExportController::class)->group(function () {
         Route::post('/admin/export/owner/list', 'exportOwnerList');
         Route::post('/admin/export/shop/list', 'exportShopList');
+    });
+    Route::controller(NotificationController::class)->group(function () {
+        Route::get('/admin/mail', 'adminMail');
+        Route::post('/admin/mail', 'adminSend');
     });
 });

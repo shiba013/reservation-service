@@ -15,7 +15,7 @@ class SendReminderMails extends Command
      *
      * @var string
      */
-    protected $signature = 'remainder:send';
+    protected $signature = 'reminder:send';
 
     /**
      * The console command description.

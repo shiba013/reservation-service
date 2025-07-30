@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Area;
 use App\Models\Genre;
 use App\Models\Shop;
+use App\Models\Review;
 use App\Models\Reservation;
 use App\Models\ReservationSlot;
 
@@ -38,7 +39,6 @@ class ShopController extends Controller
         return view('top', compact('shops', 'areas', 'genres', 'favoriteIds', 'isAuth'));
     }
 
-
     public function detail($shopId)
     {
         $shop = Shop::with('area', 'genre')
@@ -55,5 +55,40 @@ class ShopController extends Controller
         }
 
         return view('user.detail', compact('shop', 'unique'));
+    }
+
+    public function review($shopId)
+    {
+        $shop = Shop::where('id', $shopId)->first();
+        $reviews = Review::with('user')
+        ->where('shop_id', $shopId)
+        ->paginate(5);
+
+        return view('user.review', compact('shop', 'reviews'));
+    }
+
+    public function sort(Request $request, $shopId)
+    {
+        $shop = Shop::where('id', $shopId)->first();
+        $query = Review::with('user')
+        ->where('shop_id', $shopId);
+
+        switch ($request->sort) {
+            case 'latest':
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+            case 'oldest':
+                $query->orderBy('created_at', 'asc');
+                break;
+            case 'high':
+                $query->orderBy('evaluation', 'desc');
+                break;
+            case 'low':
+                $query->orderBy('evaluation', 'asc');
+                break;
+        }
+        $reviews = $query->paginate(5);
+        return view('user.review', compact('shop', 'reviews'));
     }
 }
