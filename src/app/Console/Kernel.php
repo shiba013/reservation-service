@@ -15,11 +15,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $reservationSlots->command('generate:reservation-slots')
+        $schedule->command('generate:reservation-slots')
         ->monthlyOn(1, '08:00')
         ->withoutOverlapping();
 
-        $remainderMails->command('remainder:send')
+        $schedule->command('reminder:send')
         ->dailyAt('09:00');
     }
 
