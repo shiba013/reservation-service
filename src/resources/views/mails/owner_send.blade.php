@@ -15,12 +15,22 @@
     <form action="/owner/mail" method="post" class="mail-form">
         @csrf
         <div class="mail-form__group">
+            <label for="shop_id" class="mail-form__label">配信する店舗を選択
+                <span class="mail-form__span">必須</span>
+            </label>
+            <select name="shop_id" id="shop_id" class="mail-form__select">
+                @foreach ($shops as $shop)
+                <option value="{{ $shop->id }}">{{ $shop->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="mail-form__group">
             <label for="send-to" class="mail-form__label">宛先
                 <span class="mail-form__span">必須</span>
             </label>
             <select name="send-to" id="send-to" class="mail-form__select">
-                @foreach ($sendTargets as $target)
-                <option value="{{ $target }}">{{ $target }}</option>
+                @foreach ($sendTargets as $key => $target)
+                <option value="{{ $key }}">{{ $target }}</option>
                 @endforeach
             </select>
             @error('send-to')

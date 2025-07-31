@@ -19,8 +19,8 @@
                 <span class="mail-form__span">必須</span>
             </label>
             <select name="send-to" id="send-to" class="mail-form__select">
-                @foreach ($sendTargets as $target)
-                <option value="{{ $target }}">{{ $target }}</option>
+                @foreach ($sendTargets as $key => $target)
+                <option value="{{ $key }}">{{ $target }}</option>
                 @endforeach
             </select>
             @error('send-to')
@@ -41,6 +41,9 @@
                 <span class="mail-form__span">必須</span>
             </label>
             <textarea name="body" id="body" class="mail-form__textarea">{{ old('body') }}</textarea>
+            @error('body')
+            <p class="alert">{{ $message }}</p>
+            @enderror
         </div>
         <div class="mail-form__group">
             <input type="submit" value="送信する" class="submit-btn">
