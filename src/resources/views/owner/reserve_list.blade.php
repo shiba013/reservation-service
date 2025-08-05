@@ -57,6 +57,15 @@
             <input type="hidden" name="date" value="{{ request('date') }}">
             <input type="submit" value="CSV出力" class="export-btn">
         </form>
+        <select name="sort" id="sortSelect" class="sort-select">
+            @if (!request('sort'))
+            <option value="" disable selected hidden>時間順に並び替え</option>
+            @else
+            <option value="">リセット</option>
+            @endif
+            <option value="asc" {{ request('sort') == 'asc' ? 'selected' : '' }}>昇順</option>
+            <option value="desc" {{ request('sort') == 'desc' ? 'selected' : '' }}>降順</option>
+        </select>
         <div class="paginate">
             {{ $reservations->links('pagination::bootstrap-4')}}
         </div>
@@ -244,6 +253,7 @@
 @section('scripts')
 <script src="{{ asset('js/owner/search_date.js') }}"></script>
 <script src="{{ asset('js//owner/reservation.js') }}"></script>
+<!--バリデーション機能-->
 @if (session('reservation_error_id'))
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -251,4 +261,22 @@
         });
     </script>
 @endif
+<!--ソート機能-->
+<script>
+    document.getElementById('sortSelect').addEventListener('change', function () {
+        const sort = this.value;
+        const params = new URLSearchParams(window.location.search);
+
+        if (sort) {
+            params.set('sort', sort);
+        } else {
+            params.delete('sort');
+        }
+
+        const shopId = '{{ $shop->id }}';
+        const base = `/owner/reserve/${shopId}`;
+        const query = params.toString();
+        window.location.href = `${base}?${query}`;
+    })
+</script>
 @endsection

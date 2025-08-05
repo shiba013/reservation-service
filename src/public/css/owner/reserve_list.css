@@ -180,8 +180,7 @@ input.calendar__input::-webkit-calendar-picker-indicator {
     font-size: 22px;
 }
 
-/*CSV出力のボタン
-ページネータ*/
+/*CSV出力のボタン*/
 .export-btn {
     width: 150px;
     height: 40px;
@@ -195,6 +194,25 @@ input.calendar__input::-webkit-calendar-picker-indicator {
     cursor: pointer;
 }
 
+/*ソートボタン*/
+.sort-select {
+    width: 200px;
+    height: 40px;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url('/icon/downArrow.png');
+    background-repeat: no-repeat;
+    background-size: 10px auto;
+    background-position: right 12px center;
+    border: none;
+    outline: none;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    font-size: 15px;
+    padding: 10px;
+}
+
+
+/*ページネータ*/
 .paginate {
     height: 40px;
 }

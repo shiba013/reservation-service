@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
                 'role' => 1,
             ],
             [
-                'name' => 'とおりすがり',
+                'name' => '一般ユーザ1',
                 'email' => 'user1@example.com',
                 'password' => Hash::make('user0987'),
                 'email_verified_at' => now(),
@@ -38,14 +38,14 @@ class UserSeeder extends Seeder
                 'role' => 2,
             ],
             [
-                'name' => 'すごい店長',
+                'name' => 'お店のオーナー1',
                 'email' => 'owner1@example.com',
                 'password' => Hash::make('owner0987'),
                 'email_verified_at' => now(),
                 'role' => 2,
             ],
             [
-                'name' => '管理者様',
+                'name' => '管理者',
                 'email' => 'admin@example.com',
                 'password' => Hash::make('admin1234'),
                 'email_verified_at' => now(),

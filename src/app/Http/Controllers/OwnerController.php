@@ -70,14 +70,27 @@ class OwnerController extends Controller
         $shop = Shop::where('id', $shopId)
         ->where('user_id', $user->id)
         ->first();
-        $reservations = Reservation::with('shop', 'user')
+
+        $query = Reservation::with('shop', 'user')
         ->where('shop_id', $shopId)
-        ->where('date', $target->format('Y-m-d'))
-        ->paginate(5);
+        ->where('date', $target->format('Y-m-d'));
 
         $slots = ReservationSlot::where('shop_id', $shopId)
         ->where('date', $target->format('Y-m-d'))
         ->get();
+
+        switch ($request->sort) {
+            case 'asc':
+                $query->orderBy('time', 'asc');
+                break;
+            case 'desc':
+                $query->orderBy('time', 'desc');
+                break;
+        }
+        $reservations = $query->paginate(5)->appends([
+            'date' => $request->input('date'),
+            'sort' => $request->input('sort'),
+        ]);
 
         return view('owner.reserve_list', compact('todayFormat','previousDay', 'nextDay', 'shop', 'reservations', 'slots'));
     }

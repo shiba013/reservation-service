@@ -105,3 +105,6 @@ Route::middleware('auth', 'verified', 'role:3')->group(function () {
         Route::post('/admin/mail', 'adminSend');
     });
 });
+
+//QRコード読み取り後遷移するページ
+Route::view('/qr', 'user.qr');
