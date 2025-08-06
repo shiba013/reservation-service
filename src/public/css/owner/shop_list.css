@@ -183,3 +183,9 @@ body {
 .table__link {
     color: #000;
 }
+
+@media screen and (max-width: 1000px) {
+    .table-title {
+        font-size: 18px;
+    }
+}

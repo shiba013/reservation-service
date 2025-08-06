@@ -278,7 +278,6 @@ input.calendar__input::-webkit-calendar-picker-indicator {
 .table-data {
     height: 60px;
     text-align: center;
-    vertical-align: middle;
     background-color: #fff;
     border: 1px solid #ddd;
     font-size: 18px;
@@ -523,5 +522,20 @@ input.calendar__input::-webkit-calendar-picker-indicator {
     .setting__img {
         width: 20px;
         height: 20px;
+    }
+
+    .table-data:last-of-type {
+        justify-content: space-around;
+        gap: 5px;
+    }
+
+    .table-data {
+        font-size: 14px;
+    }
+
+    .reserve-update,
+    .reserve-delete {
+        font-size: 14px;
+        padding: 3px 7px;
     }
 }
