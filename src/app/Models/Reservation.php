@@ -17,10 +17,12 @@ class Reservation extends Model
         'date',
         'time',
         'number',
+        'is_paid',
     ];
 
     protected $casts = [
         'date' => 'date',
+        'is_paid' => 'boolean',
     ];
 
     public function getTimeAttribute($value)

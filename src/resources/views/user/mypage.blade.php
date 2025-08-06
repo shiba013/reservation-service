@@ -52,6 +52,13 @@
                     </td>
                 </tr>
             </table>
+            <div class="stripe">
+                @if ($reservation->is_paid === false)
+                <a href="{{ route('pay') }}" class="stripe-link" data-id="{{ $reservation->id }}">決済する</a>
+                @else
+                <p class="stripe-message">決済完了</p>
+                @endif
+            </div>
         </div>
         <!--予約変更フォーム-->
         <div class="overlay" id="overlay-edit{{ $reservation->id }}">
@@ -231,6 +238,7 @@
 @section('scripts')
 <script src="{{ asset('js/user/reservation.js') }}"></script>
 <script src="{{ asset('js/user/favorite.js') }}"></script>
+<script src="{{ asset('js/user/payment.js') }}"></script>
 @if (session('reservation_error_id'))
     <script>
         document.addEventListener('DOMContentLoaded', function () {

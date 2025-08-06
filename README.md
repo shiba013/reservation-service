@@ -42,7 +42,7 @@
 - Laravel(8.83.29)
 - MySQL(8.0.26)
 - Fortify(1.19.1)
-- stripe(17.1.1)
+- stripe(17.5.0)
 - JavaScript
 
 

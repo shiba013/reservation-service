@@ -21,6 +21,7 @@ class CreateReservationsTable extends Migration
             $table->date('date');
             $table->time('time');
             $table->tinyInteger('number')->unsigned();
+            $table->boolean('is_paid')->default(false)->comment('先行決済 true:済み false:なし');
             $table->timestamps();
         });
     }

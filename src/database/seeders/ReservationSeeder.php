@@ -43,6 +43,7 @@ class ReservationSeeder extends Seeder
                     'date' => $slot->date,
                     'time' => $slot->reserve_start,
                     'number' => rand(1, 6),
+                    'is_paid' => false,
                 ];
             }
         }

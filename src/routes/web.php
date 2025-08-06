@@ -8,6 +8,7 @@ use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +58,9 @@ Route::middleware('auth','verified')->group(function () {
         Route::patch('/review/update', 'reviewUpdate');
         Route::delete('/review/delete', 'reviewDestroy');
     });
+    Route::post('/pay', [PaymentController::class, 'pay'])->name('pay');
+    Route::get('/pay/success', [PaymentController::class, 'success'])->name('success');
+    Route::get('/pay/cancel', [PaymentController::class, 'cancel'])->name('cancel');
 });
 
 Route::middleware('auth', 'verified', 'role:2,3')->group(function () {

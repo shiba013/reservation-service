@@ -87,6 +87,7 @@
                 <th class="table-title">時間</th>
                 <th class="table-title">予約名</th>
                 <th class="table-title">人数</th>
+                <th class="table-title">先行決済</th>
                 <th class="table-title">詳細</th>
             </tr>
             @foreach ($reservations as $reservation)
@@ -94,6 +95,13 @@
                 <td class="table-data">{{ $reservation->time->format('H:i') }}</td>
                 <td class="table-data">{{ $reservation->user->name }}</td>
                 <td class="table-data">{{ $reservation->number }}人</td>
+                <td class="table-data">
+                    @if ($reservation->is_paid === false)
+                    未決済
+                    @else
+                    完了
+                    @endif
+                </td>
                 <td class="table-data">
                     <button type="button" class="reserve-update" onclick="openOwnerUpdateForm({{ $reservation->id }})">詳細</button>
                     <button type="button" class="reserve-delete" onclick="openOwnerDeleteForm({{ $reservation->id }})">削除</button>
