@@ -63,10 +63,10 @@ class AuthController extends Controller
                     'email' => '管理者としての権限が必要です',
                 ])->withInput();
             }
-            return back()->withErrors([
-                'email' => 'ログイン情報が登録されていません',
-            ])->withInput();
         }
+        return back()->withErrors([
+            'email' => 'ログイン情報が登録されていません',
+        ])->withInput();
     }
 
     public function logout(Request $request)

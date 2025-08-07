@@ -28,7 +28,7 @@ class ShopRequest extends FormRequest
             'image' => 'required |mimes:png,jpeg',
             'area' => 'required |max:100',
             'genre' => 'required |max:100',
-            'overview' => 'required |max:255',
+            'overview' => 'required |max:500',
             'start_time' => 'required |before:end_time',
             'end_time' => 'required |after:start_time',
         ];
@@ -46,7 +46,7 @@ class ShopRequest extends FormRequest
             'genre.required' => 'ジャンルを入力してください',
             'genre.max' => 'ジャンルは100文字以内に入力してください',
             'overview.required' => '概要を入力してください',
-            'overview.max' => '概要は255文字以内で入力してください',
+            'overview.max' => '概要は500文字以内で入力してください',
             'start_time.required' => '営業開始時間を入力してください',
             'start_time.before' => '営業終了時間を超えています',
             'end_time.required' => '営業終了時間を入力してください',

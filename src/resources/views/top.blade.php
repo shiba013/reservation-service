@@ -41,6 +41,9 @@
             <div class="input__search">
                 <img src="{{ asset('icon/search.png') }}" alt="search" class="search-icon">
                 <input type="text" name="keyword" value="{{ request('keyword') }}" class="search-form__input" placeholder="Search ..." id="keywordInput">
+                <a href="/" class="reset">
+                    <img src="{{ asset('icon/close.png') }}" alt="reset" class="reset-icon">
+                </a>
             </div>
         </nav>
     </form>

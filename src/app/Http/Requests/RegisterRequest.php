@@ -26,7 +26,7 @@ class RegisterRequest extends FormRequest
         return [
             'name' => 'required |string |max:191',
             'email' => 'required |email | max:191',
-            'password' => 'required |min:8 |max:191',
+            'password' => 'required |min:8',
         ];
     }
 
@@ -40,7 +40,6 @@ class RegisterRequest extends FormRequest
             'email.max' => 'メールアドレスは191文字以内で入力してください',
             'password.required' => 'パスワードを入力してください',
             'password.min' => 'パスワードは8文字以上で入力してください',
-            'password.max' => 'パスワードは191文字以内で入力してください',
         ];
     }
 }

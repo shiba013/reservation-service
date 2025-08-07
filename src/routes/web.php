@@ -58,9 +58,11 @@ Route::middleware('auth','verified')->group(function () {
         Route::patch('/review/update', 'reviewUpdate');
         Route::delete('/review/delete', 'reviewDestroy');
     });
-    Route::post('/pay', [PaymentController::class, 'pay'])->name('pay');
-    Route::get('/pay/success', [PaymentController::class, 'success'])->name('success');
-    Route::get('/pay/cancel', [PaymentController::class, 'cancel'])->name('cancel');
+    Route::controller(PaymentController::class)->group(function () {
+        Route::post('/pay', 'pay')->name('pay');
+        Route::get('/pay/success', 'success')->name('success');
+        Route::get('/pay/cancel', 'cancel')->name('cancel');
+    });
 });
 
 Route::middleware('auth', 'verified', 'role:2,3')->group(function () {

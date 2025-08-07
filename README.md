@@ -3,7 +3,7 @@
 飲食店の予約システムを作成しました。<br>
 ログインユーザは登録されている飲食店に対して予約・レビュー投稿・お気に入り登録などが行えます。<br>
 また、店舗代表者や管理者といった別途権限を用意し、機能要件を切り分けています。<br>
-![alt](top.png)
+![alt](img/top.png)
 
 
 ## 作成した目的
@@ -47,7 +47,7 @@
 
 
 ## テーブル設計およびER図
-![alt](er.png)
+![alt](img/er.png)
 
 
 ## 環境構築
@@ -128,15 +128,68 @@ php artisan config:clear
 1. Stripeのアカウント作成
 > 公式サイトを参照してStripeのアカウント作成を作成してください。<br>
 > 公式サイト：https://dashboard.stripe.com/
-
 2. stripe向けのパッケージのインストール
 ``` bash
 docker-compose exec php bash
 composer require stripe/stripe-php
 ```
+3. 環境変数の設定
+> .env ファイルに以下の設定を追加してください。必要な情報はStripeダッシュボードから取得できます。
+``` text
+STRIPE_SECRET_KEY=your_stripe_secret_key
+STRIPE_PUBLIC_KEY=your_stripe_public_key
+```
 
+## 単体テスト
 **単体テスト環境構築**
-
+1. MYSQLコンテナに入る
+``` bash
+docker-compose exec mysql bash
+```
+2. MySQLにrootユーザーでログイン（パスワードはrootと入力）
+``` bash
+mysql -u root -p
+```
+3. テスト用データベースの存在を確認（データベース名: demo_test）
+``` bash
+show databases;
+```
+> 「demo_test」という名前のデータベースが存在する場合は、PHPコンテナへ移動してください。<br>
+> 存在しない場合は、以下のコマンドを実行してテスト用データベースを作成してください。<br>
+``` bash
+create database demo_test;
+```
+4. 「.env」ファイルを 「.env.testing」ファイルに命名を変更。または、新しく.envファイルを作成
+``` bash
+cp .env .env.testing
+```
+5. .env.testingの以下の環境変数を変更
+``` text
+APP_ENV=test
+DB_DATABASE=demo_test
+DB_USERNAME=root
+DB_PASSWORD=root
+```
+6. PHPコンテナに入る
+``` bash
+docker-compose exec php bash
+```
+7. テスト環境用のアプリケーションキーを生成
+``` bash
+php artisan key:generate --env=testing
+```
+8. 設定キャッシュをクリア
+``` bash
+php artisan config:clear
+```
+9. テスト環境用のテーブルを作成
+``` bash
+php artisan migrate --env=testing
+```
+10. テストの実行
+``` bash
+./vendor/bin/phpunit
+```
 
 ## アカウントの種類
 ``` text
@@ -170,3 +223,13 @@ password: admin1234
 
 
 ## 動作確認時の注意事項
+> 決済処理を行う際、以下設定を参照して行うようにしてください。
+- カード決済方法
+``` text
+メールアドレス：任意のメールアドレス
+カード番号：4242 4242 4242 4242
+カード有効期限：未来の年月
+セキュリティコード：任意の3桁の数字
+カード保有者の名前：任意の名前
+国または地域：任意の国名を選択
+```
