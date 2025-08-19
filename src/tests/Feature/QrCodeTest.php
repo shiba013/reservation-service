@@ -10,6 +10,7 @@ use App\Models\Shop;
 use App\Models\User;
 use App\Models\Reservation;
 use App\Models\ReservationSlot;
+use App\Mail\ReminderMail;
 
 class QrCodeTest extends TestCase
 {
@@ -27,9 +28,9 @@ class QrCodeTest extends TestCase
             'shop_id' => $shop->id,
             'reservation_slot_id' => $reservationSlot->id,
         ]);
-        $url = URL::signedRoute('reserveList', ['shop_id' => $shop->id]);
-        $qrCode = QrCode::format('svg')->size(200)->generate($url);
+        $url = URL::signedRoute('qr.show', ['reservation' => $reservation->id]);
 
-        $this->assertStringContainsString($url, $qrCode);
+        $mail = new ReminderMail($reservation, $url);
+        $this->assertEquals($url, $mail->qrCode);
     }
 }

@@ -115,4 +115,5 @@ Route::middleware('auth', 'verified', 'role:3')->group(function () {
 });
 
 //QRコード読み取り後遷移するページ
-Route::view('/qr', 'user.qr');
+Route::get('/qr/{reservation}', [NotificationController::class, 'show'])
+->name('qr.show')->middleware('signed');

@@ -23,12 +23,16 @@ class ReminderMail extends Mailable
     public $reservation;
     public $qrCode;
 
-    public function __construct(Reservation $reservation)
+    public function __construct(Reservation $reservation, string $testQrCode = null)
     {
         $this->reservation = $reservation;
 
-        $url = URL::signedRoute('reserveList', ['shop_id' => $reservation->shop->id]);
+        if ($testQrCode !== null) {
+            $this->qrCode = $testQrCode;
+            return;
+        }
 
+        $url = URL::signedRoute('qr.show', ['reservation' => $reservation->id]);
         $this->qrCode = QrCode::size(200)->generate($url);
     }
 

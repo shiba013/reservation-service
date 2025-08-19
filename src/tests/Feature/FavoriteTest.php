@@ -37,6 +37,15 @@ class FavoriteTest extends TestCase
             'status' => 'added',
         ]);
         $this->actingAs($user)->get('/')->assertSee('favorite-icon on');
+
+        $response = $this->actingAs($user)->post('/favorite/' . $shop->id);
+        $response->assertJson([
+            'status' => 'removed',
+        ]);
+        $this->assertDatabaseMissing('favorites', [
+            'user_id' => $user->id,
+            'shop_id' => $shop->id,
+        ]);
     }
 
     public function test_guest_cannot_add_favorite()

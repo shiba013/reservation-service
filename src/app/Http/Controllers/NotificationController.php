@@ -100,4 +100,9 @@ class NotificationController extends Controller
         }
         return redirect('/admin')->with('success', 'メール配信が完了しました');
     }
+
+    public function show(Reservation $reservation)
+    {
+        return view('user.qr', compact('reservation'));
+    }
 }

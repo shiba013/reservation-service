@@ -144,10 +144,10 @@ class UserController extends Controller
             ]);
 
             if ($update) {
-                return redirect()->back()->with('success', 'ご予約内容を更新しました');
+                return redirect('/mypage')->with('success', 'ご予約内容を更新しました');
 
             }else {
-                return redirect()->back()->with('fail', 'ご予約内容を更新できませんでした');
+                return redirect('/mypage')->with('fail', 'ご予約内容を更新できませんでした');
             }
         }
     }
@@ -157,10 +157,10 @@ class UserController extends Controller
         $reservation = Reservation::find($reservationId);
         $delete = $reservation->delete();
         if ($delete) {
-            return redirect()->back()->with('success', 'ご予約を削除しました');
+            return redirect('/mypage')->with('success', 'ご予約を削除しました');
 
         } else {
-            return redirect()->back()->with('fail', 'ご予約を削除できませんでした');
+            return redirect('/mypage')->with('fail', 'ご予約を削除できませんでした');
         }
     }
 

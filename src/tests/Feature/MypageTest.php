@@ -100,38 +100,83 @@ class MypageTest extends TestCase
             'user_id' => $user->id,
             'shop_id' => $shop->id,
             'reservation_slot_id' => $slot1->id,
-            'date' => $base->copy()->format('Y-m-d'),
-            'time' => '17:00',
+            'date' => $slot1->date->format('Y-m-d'),
+            'time' => $slot1->reserve_start->format('H:i:s'),
             'number' => 3,
         ]);
 
         $response = $this->actingAs($user)->patch('/reserve/update/' . $reservation->id, [
+            'action' => '確定',
             'user_id' => $user->id,
             'shop_id' => $shop->id,
             'reservation_slot_id' => $slot2->id,
-            'date' => $base->copy()->addDay(1)->format('Y-m-d'),
-            'time' => '18:00',
+            'date' => $slot2->date->format('Y-m-d'),
+            'time' => $slot2->reserve_start->format('H:i:s'),
             'number' => 5,
         ]);
-        $response->assertRedirect('/mypage');
-
         $this->assertDatabaseHas('reservations', [
             'user_id' => $user->id,
             'shop_id' => $shop->id,
             'reservation_slot_id' => $slot2->id,
-            'date' => $base->copy()->addDay(1)->format('Y-m-d'),
-            'time' => '18:00:00',
+            'date' => $slot2->date->format('Y-m-d'),
+            'time' => $slot2->reserve_start->format('H:i:s'),
             'number' => 5,
         ]);
+        $this->actingAs($user)->get('/mypage')
+        ->assertSee($reservation->name)
+        ->assertSee('18:00')
+        ->assertSee(5);
     }
 
     public function test_delete_my_reservation()
     {
-        //
+        $base = Carbon::now();
+        $user = User::factory()->create();
+        $shop = Shop::factory()->create();
+        $slot = ReservationSlot::factory()->create([
+            'shop_id' => $shop->id,
+            'date' => $base->copy()->format('Y-m-d'),
+            'reserve_start' => $base->copy()->setTime(17, 0),
+            'reserve_end' => $base->copy()->setTime(19, 0),
+        ]);
+        $reservation = Reservation::factory()->create([
+            'user_id' => $user->id,
+            'shop_id' => $shop->id,
+            'date' => $slot->date->format('Y-m-d'),
+            'time' => $slot->reserve_start->format('H:i:s'),
+            'number' => 5,
+        ]);
+
+        $response = $this->actingAs($user)->delete('/reserve/delete/' . $reservation->id, [
+            'reservation_id' => $reservation->id,
+        ]);
+        $response->assertRedirect('/mypage');
+        $this->actingAs($user)->get('/mypage')
+        ->assertDontSee($reservation->name)
+        ->assertDontSee('17:00')
+        ->assertDontSee(5 . '人');
     }
 
     public function test_delete_favorite_shop()
     {
-        //
+        $user = User::factory()->create();
+        $shop = Shop::factory()->create();
+
+        $response = $this->actingAs($user)->post('/favorite/' . $shop->id);
+        $response->assertJson([
+            'status' => 'added',
+        ]);
+        $this->actingAs($user)->get('/mypage')
+        ->assertSee($shop->name)
+        ->assertSee('favorite-icon on');
+
+        $response = $this->actingAs($user)->post('/favorite/' . $shop->id);
+        $response->assertJson([
+            'status' => 'removed',
+        ]);
+        $this->assertDatabaseMissing('favorites', [
+            'user_id' => $user->id,
+            'shop_id' => $shop->id,
+        ]);
     }
 }
