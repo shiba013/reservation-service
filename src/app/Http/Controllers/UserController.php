@@ -15,6 +15,8 @@ use App\Models\ReservationSlot;
 use App\Models\Review;
 use Illuminate\Support\Carbon;
 
+use Illuminate\Support\Facades\Log;
+
 class UserController extends Controller
 {
     public function reserve(ReservationRequest $request, $shopId)
@@ -86,31 +88,67 @@ class UserController extends Controller
         return view('user.mypage', compact('reservations', 'favoriteShops', 'slotsShopId'));
     }
 
+    public function reserveSlots(Request $request, $reservationId)
+    {
+        $date = $request->query('date');
+
+        $currentReservation = Reservation::find($reservationId);
+        $shopId = $currentReservation->shop_id;
+        $currentNumber = $currentReservation->number;
+
+        $slots = ReservationSlot::where('shop_id', $shopId)
+        ->whereDate('date', $date)
+        ->orderBy('reserve_start')
+        ->get();
+
+        $slots = $slots->map(function ($slot) use ($currentReservation, $currentNumber, $date) {
+            $reservedNumber = $slot->reservedNumber($date);
+            $slot->reserved_number = $reservedNumber;
+            $slot->remaining_number = max(0, $slot->max_number - $reservedNumber);
+
+            return [
+                'time' => $slot->reserve_start->format('H:i'),
+                'remaining_number' => $slot->remaining_number,
+            ];
+        });
+        return response()->json($slots);
+    }
+
     public function reserveUpdate(ReservationRequest $request, $reservationId)
     {
-        $reservation = Reservation::with('slot')
-        ->find($reservationId);
-        $shopId = $reservation->shop_id;
-        $date = Carbon::parse($request->date)->format('Y-m-d');
-        $time = $request->time;
+        $action = $request->input('action');
 
-        $slot = ReservationSlot::where('shop_id', $shopId)
-        ->where('date', $date)
-        ->where('reserve_start', $time)
-        ->first();
+        if ($action === '変更') {
+            return redirect()->back()->with([
+                'confirm_reservation_id' => $reservationId,
+                'confirm_data' => $request->only(['date', 'time', 'number']),
+            ]);
+        }
+        if ($action === '確定') {
+            $reservation = Reservation::with('slot')
+            ->find($reservationId);
+            $shopId = $reservation->shop_id;
+            $date = Carbon::parse($request->date)->format('Y-m-d');
+            $time = Carbon::parse($request->time)->format('H:i:s');
 
-        $update = $reservation->update([
-            'date' => $date,
-            'time' => $time,
-            'number' => $request->number,
-            'reservation_slot_id' => $slot->id,
-        ]);
+            $slot = ReservationSlot::where('shop_id', $shopId)
+            ->where('date', $date)
+            ->where('reserve_start', $time)
+            ->first();
 
-        if ($update) {
-            return redirect()->back()->with('success', 'ご予約内容を更新しました');
+            $update = $reservation->update([
+                'date' => $date,
+                'time' => $time,
+                'number' => $request->number,
+                'reservation_slot_id' => $slot->id,
+            ]);
 
-        }else {
-            return redirect()->back()->with('fail', 'ご予約内容を更新できませんでした');
+            if ($update) {
+                return redirect()->back()->with('success', 'ご予約内容を更新しました');
+
+            }else {
+                return redirect()->back()->with('fail', 'ご予約内容を更新できませんでした');
+            }
         }
     }
 

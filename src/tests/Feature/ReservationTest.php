@@ -7,7 +7,6 @@ use Tests\TestCase;
 use Illuminate\Support\Carbon;
 use App\Models\Shop;
 use App\Models\User;
-use App\Models\Reservation;
 use App\Models\ReservationSlot;
 
 class ReservationTest extends TestCase
@@ -102,7 +101,7 @@ class ReservationTest extends TestCase
     {
         $user = User::factory()->create();
         $shop = Shop::factory()->create();
-        $base = Carbon::now();
+        $base = Carbon::now()->addDay();
         $reservationSlot = ReservationSlot::factory()->create([
             'shop_id' => $shop->id,
             'date' => $base->copy()->format('Y-m-d'),

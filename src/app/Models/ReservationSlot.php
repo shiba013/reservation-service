@@ -55,8 +55,13 @@ class ReservationSlot extends Model
         return $this->hasMany(Reservation::class, 'reservation_slot_id');
     }
 
-    public function reservedNumber() :int
+    public function reservedNumber($date = null) :int
     {
-        return $this->reservations()->sum('number');
+        $query = $this->reservations();
+
+        if ($date) {
+            $query->whereDate('date', $date);
+        }
+        return $query->sum('number');
     }
 }

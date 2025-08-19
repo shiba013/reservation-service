@@ -63,66 +63,75 @@
         <!--予約変更フォーム-->
         <div class="overlay" id="overlay-edit{{ $reservation->id }}">
             <div class="edit" id="edit-form{{ $reservation->id }}">
-                <div class="edit-form">
-                    <div class="edit-form__group">
-                        <p class="edit-message">変更内容を選択してください</p>
+                <form action="/reserve/update/{{ $reservation->id }}" method="post" class="edit-form">
+                    @csrf
+                    @method('PATCH')
+                    <div class="edit-form">
+                        <div class="edit-form__group">
+                            <p class="edit-message">変更内容を選択してください</p>
+                        </div>
+                        <div class="edit-form__group">
+                            <table class="edit-table">
+                                <tr class="edit-table__row">
+                                    <th class="table__title">Shop</th>
+                                    <td class="table__data">{{ $reservation->shop->name }}</td>
+                                </tr>
+                                <tr class="edit-table__row">
+                                    <th class="table__title">Date</th>
+                                    <td class="table__data">
+                                        <input type="date" name="date" class="edit-form__input" id="select-date-{{ $reservation->id }}"
+                                        value="{{ request()->query('date') }}">
+                                        @error('date')
+                                        <p class="alert" id="error-date-{{ $reservation->id }}">
+                                            {{ $message }}
+                                        </p>
+                                        @enderror
+                                    </td>
+                                </tr>
+                                <tr class="edit-table__row">
+                                    <th class="table__title">Time</th>
+                                    <td class="table__data">
+                                        <select name="time" id="select-time-{{ $reservation->id }}" class="edit-form__select">
+                                            @foreach ($slotsShopId[$reservation->shop_id] as $slot)
+                                            <option value="{{ $slot->reserve_start->format('H:i') }}"
+                                            data-remaining="{{ $slot->remaining_number }}">
+                                                {{ $slot->reserve_start->format('H:i') }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                        @error('time')
+                                        <p class="alert" id="error-time-{{ $reservation->id }}">
+                                            {{ $message }}
+                                        </p>
+                                        @enderror
+                                    </td>
+                                </tr>
+                                <tr class="edit-table__row">
+                                    <th class="table__title">Number</th>
+                                    <td class="table__data">
+                                        <select name="number" id="select-number-{{ $reservation->id }}" class="edit-form__select">
+                                        </select>
+                                        @error('number')
+                                        <p class="alert" id="error-number-{{ $reservation->id }}">
+                                            {{ $message }}
+                                        </p>
+                                        @enderror
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="edit-form__group">
+                            <input type="hidden" name="reservation_id" value="{{ $reservation->id }}">
+                            <input type="button" value="キャンセル" class="form-btn__cancel"
+                            onclick="closeEditForm({{ $reservation->id }})">
+                            <input type="submit" value="変更" class="form-btn__edit" name="action"
+                            onclick="openUpdateForm({{ $reservation->id }})">
+                        </div>
                     </div>
-                    <div class="edit-form__group">
-                        <table class="edit-table">
-                            <tr class="edit-table__row">
-                                <th class="table__title">Shop</th>
-                                <td class="table__data">{{ $reservation->shop->name }}</td>
-                            </tr>
-                            <tr class="edit-table__row">
-                                <th class="table__title">Date</th>
-                                <td class="table__data">
-                                    <input type="date" name="date" class="edit-form__input"
-                                    value="{{ old('date', $reservation->date->format('Y-m-d')) }}">
-                                    @error('date')
-                                    <p class="alert" id="error-date-{{ $reservation->id }}">{{ $message }}</p>
-                                    @enderror
-                                </td>
-                            </tr>
-                            <tr class="edit-table__row">
-                                <th class="table__title">Time</th>
-                                <td class="table__data">
-                                    <select name="time" id="selectTime-{{ $reservation->id }}" class="edit-form__select">
-                                        <option value="" hidden>時間を選択してください</option>
-                                        @foreach ($slotsShopId[$reservation->shop_id] as $slot)
-                                        <option value="{{ $slot->reserve_start->format('H:i') }}"
-                                        data-remaining="{{ $slot->remaining_number }}">
-                                            {{ $slot->reserve_start->format('H:i') }}
-                                        </option>
-                                        @endforeach
-                                    </select>
-                                    @error('time')
-                                    <p class="alert" id="error-time-{{ $reservation->id }}">{{ $message }}</p>
-                                    @enderror
-                                </td>
-                            </tr>
-                            <tr class="edit-table__row">
-                                <th class="table__title">Number</th>
-                                <td class="table__data">
-                                    <select name="number" id="selectNumber-{{ $reservation->id }}" class="edit-form__select">
-                                        <option value="" hidden>人数を選択してください</option>
-                                    </select>
-                                    @error('number')
-                                    <p class="alert" id="error-number-{{ $reservation->id }}">{{ $message }}</p>
-                                    @enderror
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="edit-form__group">
-                        <input type="button" value="キャンセル" class="form-btn__cancel"
-                        onclick="closeEditForm({{ $reservation->id }})">
-                        <input type="button" value="変更" class="form-btn__edit"
-                        onclick="openUpdateForm({{ $reservation->id }})">
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
-        <!--予約更新フォーム-->
+        <!--内容確認-->
         <div class="overlay" id="overlay-update{{ $reservation->id }}">
             <div class="update" id="update-form{{ $reservation->id }}">
                 <form action="/reserve/update/{{ $reservation->id }}" method="post" class="update-form">
@@ -139,27 +148,26 @@
                             </tr>
                             <tr class="update-table__row">
                                 <th class="table__title">Data</th>
-                                <td class="table__data" id="confirm-date{{ $reservation->id }}"></td>
+                                <td class="table__data" id="confirm-date-{{ $reservation->id }}"></td>
                             </tr>
                             <tr class="update-table__row">
                                 <th class="table__title">Time</th>
-                                <td class="table__data" id="confirm-time{{ $reservation->id }}"></td>
+                                <td class="table__data" id="confirm-time-{{ $reservation->id }}"></td>
                             </tr>
                             <tr class="update-table__row">
                                 <th class="table__title">Number</th>
-                                <td class="table__data" id="confirm-number{{ $reservation->id }}">
-                                    <span class="table__data__span">人</span>
-                                </td>
+                                <td class="table__data" id="confirm-number-{{ $reservation->id }}"></td>
                             </tr>
                         </table>
                     </div>
-                    <input type="hidden" name="date" id="update-date{{ $reservation->id }}">
-                    <input type="hidden" name="time" id ="update-time{{ $reservation->id }}">
-                    <input type="hidden" name="number" id="update-number{{ $reservation->id }}">
+                    <input type="hidden" name="reservation_id" value="{{ $reservation->id }}">
+                    <input type="hidden" name="date" id="update-date-{{ $reservation->id }}">
+                    <input type="hidden" name="time" id ="update-time-{{ $reservation->id }}">
+                    <input type="hidden" name="number" id="update-number-{{ $reservation->id }}">
                     <div class="update-form__group">
-                        <input type="button" value="キャンセル" class="form-btn__cancel"
+                        <input type="button" value="戻る" class="form-btn__cancel"
                         onclick="closeUpdateForm({{ $reservation->id }})">
-                        <input type="submit" value="確定" class="form-btn__update">
+                        <input type="submit" value="確定" class="form-btn__update" name="action">
                     </div>
                 </form>
             </div>
@@ -236,14 +244,15 @@
 </div>
 @endsection
 @section('scripts')
+<script>
+    window.reservationData = {
+        hasErrors: @json($errors->any()),
+        oldReservationId: @json(old('reservation_id')),
+        confirmReservationId: @json(session('confirm_reservation_id')),
+        confirmData: @json(session('confirm_data'))
+    };
+</script>
 <script src="{{ asset('js/user/reservation.js') }}"></script>
 <script src="{{ asset('js/user/favorite.js') }}"></script>
 <script src="{{ asset('js/user/payment.js') }}"></script>
-@if (session('reservation_error_id'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            openEditForm({{ session('reservation_error_id') }});
-        });
-    </script>
-@endif
 @endsection

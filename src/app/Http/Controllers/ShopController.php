@@ -57,6 +57,27 @@ class ShopController extends Controller
         return view('user.detail', compact('shop', 'unique'));
     }
 
+    public function getSlots(Request $request, $shopId)
+    {
+        $date = $request->query('date');
+
+        $slots = ReservationSlot::where('shop_id', $shopId)
+        ->whereDate('date', $date)
+        ->orderBy('reserve_start')
+        ->get();
+
+        $slots = $slots->transform(function ($slot) {
+            $reservedNumber = $slot->reservedNumber();
+            $slot->reserved_number = $reservedNumber;
+            $slot->remaining_number = max(0, $slot->max_number - $reservedNumber);
+            return [
+                'time' => $slot->reserve_start->format('H:i'),
+                'remaining_number' => $slot->remaining_number,
+            ];
+        });
+        return response()->json($slots);
+    }
+
     public function review($shopId)
     {
         $shop = Shop::where('id', $shopId)->first();

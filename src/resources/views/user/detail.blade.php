@@ -34,14 +34,14 @@
                 <h2 class="reserve-form__title">予約</h2>
             </div>
             <div class="reserve-form__group">
-                <input type="date" name="date" class="reserve-form__input" value="{{ old('date') }}" id="selectDate">
+                <input type="date" name="date" class="reserve-form__input" value="{{ request()->query('date') }}" id="selectDate">
                 @error('date')
                 <p class="alert">{{ $message }}</p>
                 @enderror
             </div>
             <div class="reserve-form__group">
                 <select name="time" id="selectTime" class="reserve-form__select">
-                    <option value="" hidden>時間を選択してください</option>
+                    <option value="" hidden></option>
                     @foreach ($unique as $slot)
                     <option value="{{ $slot->reserve_start->format('H:i') }}"
                     data-remaining="{{ $slot->remaining_number }}">
@@ -54,9 +54,7 @@
                 @enderror
             </div>
             <div class="reserve-form__group">
-                <select name="number" id="selectNumber" class="reserve-form__select">
-                    <option value="" hidden>人数を選択してください</option>
-                </select>
+                <select name="number" id="selectNumber" class="reserve-form__select"></select>
                 @error('number')
                 <p class="alert">{{ $message }}</p>
                 @enderror

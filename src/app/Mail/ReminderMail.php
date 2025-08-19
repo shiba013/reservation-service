@@ -27,7 +27,7 @@ class ReminderMail extends Mailable
     {
         $this->reservation = $reservation;
 
-        $url = URL::signedRoute('reserveList', ['shop' =>$reservation->shop->id]);
+        $url = URL::signedRoute('reserveList', ['shop_id' => $reservation->shop->id]);
 
         $this->qrCode = QrCode::size(200)->generate($url);
     }

@@ -41,6 +41,7 @@ Route::controller(ShopController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('/search', 'search');
     Route::get('/detail/{shop_id}', 'detail');
+    Route::get('/detail/slots/{shop_id}', 'getSlots');
     route::get('/review/{shop_id}', 'review');
     Route::get('/review/sort/{shop_id}', 'sort');
 });
@@ -52,6 +53,7 @@ Route::middleware('auth','verified')->group(function () {
         Route::view('/done', 'user.done');
         Route::post('/favorite/{shop_id}', 'favorite');
         Route::get('/mypage', 'mypage');
+        Route::get('/mypage/slots/{reservation_id}', 'reserveSlots');
         Route::patch('/reserve/update/{reservation_id}', 'reserveUpdate');
         Route::delete('/reserve/delete/{reservation_id}', 'reserveDestroy');
         Route::post('/review/{shop_id}', 'reviewCreate');

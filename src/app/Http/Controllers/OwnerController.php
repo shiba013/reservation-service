@@ -113,7 +113,7 @@ class OwnerController extends Controller
                 ->update(['is_active' => (bool)$isActive]);
             }
         });
-        return redirect()->back()->with('success', '本日の受付設定を変更しました');
+        return redirect()->back()->with('success', '受付設定を変更しました');
     }
 
     public function update(ReservationRequest $request, $reservationId)
