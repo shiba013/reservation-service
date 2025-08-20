@@ -73,8 +73,8 @@ class AdminController extends Controller
         ->withAvg('reviews', 'evaluation')
         ->withCount('reviews')
         ->paginate(5);
-        $areas = Area::all();
-        $genres = Genre::all();
+        $areas = Area::select('area')->distinct()->get();
+        $genres = Genre::select('genre')->distinct()->get();
         return view('admin.shop_list', compact('shops', 'areas', 'genres'));
     }
 
@@ -88,8 +88,8 @@ class AdminController extends Controller
         ->GenreSearch($request->genre)
         ->KeywordSearch($request->keyword)
         ->paginate(5);
-        $areas = Area::all();
-        $genres = Genre::all();
+        $areas = Area::select('area')->distinct()->get();
+        $genres = Genre::select('genre')->distinct()->get();
         return view('admin.shop_list', compact('shops', 'areas', 'genres'));
     }
 

@@ -16,8 +16,8 @@
                     <option value="">リセット</option>
                     @endif
                     @foreach ($areas as $area)
-                    <option value="{{ $area->id }}"
-                    {{ request('area') == $area->id ? 'selected' : '' }}>
+                    <option value="{{ $area->area }}"
+                    {{ request('area') == $area->area ? 'selected' : '' }}>
                         {{ $area->area }}
                     </option>
                     @endforeach
@@ -31,8 +31,8 @@
                     <option value="">リセット</option>
                     @endif
                     @foreach ($genres as $genre)
-                    <option value="{{ $genre->id }}"
-                    {{ request('genre') == $genre->id ? 'selected' : '' }}>
+                    <option value="{{ $genre->genre }}"
+                    {{ request('genre') == $genre->genre ? 'selected' : '' }}>
                         {{ $genre->genre }}
                     </option>
                     @endforeach

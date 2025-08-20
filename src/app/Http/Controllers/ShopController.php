@@ -17,8 +17,8 @@ class ShopController extends Controller
     {
         $user = Auth::user();
         $shops = Shop::with('area', 'genre')->get();
-        $areas = Area::all();
-        $genres = Genre::all();
+        $areas = Area::select('area')->distinct()->get();
+        $genres = Genre::select('genre')->distinct()->get();
         $favoriteIds = $user ? $user->favorites->pluck('shop_id')->toArray() : [];
         $isAuth = Auth::check();
         return view('top', compact('shops', 'areas', 'genres', 'favoriteIds', 'isAuth'));
@@ -32,8 +32,8 @@ class ShopController extends Controller
         ->GenreSearch($request->genre)
         ->KeywordSearch($request->keyword)
         ->get();
-        $areas = Area::all();
-        $genres = Genre::all();
+        $areas = Area::select('area')->distinct()->get();
+        $genres = Genre::select('genre')->distinct()->get();
         $favoriteIds = $user ? $user->favorites->pluck('shop_id')->toArray() : [];
         $isAuth = $user ? true : false;
         return view('top', compact('shops', 'areas', 'genres', 'favoriteIds', 'isAuth'));

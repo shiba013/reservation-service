@@ -35,8 +35,8 @@ class OwnerController extends Controller
         ->withCount('reviews')
         ->where('user_id', $user->id)
         ->paginate(5);
-        $areas = Area::all();
-        $genres = Genre::all();
+        $areas = Area::select('area')->distinct()->get();
+        $genres = Genre::select('genre')->distinct()->get();
         return view('owner.shop_list', compact('shops', 'areas', 'genres'));
     }
 
@@ -52,8 +52,8 @@ class OwnerController extends Controller
         ->KeywordSearch($request->keyword)
         ->paginate(5)
         ->appends($request->query());
-        $areas = Area::all();
-        $genres = Genre::all();
+        $areas = Area::select('area')->distinct()->get();
+        $genres = Genre::select('genre')->distinct()->get();
         return view('owner.shop_list', compact('shops', 'areas', 'genres'));
     }
 
