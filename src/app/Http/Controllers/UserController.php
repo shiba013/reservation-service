@@ -68,6 +68,7 @@ class UserController extends Controller
 
         $reservations = Reservation::with('shop')
         ->where('user_id', $user->id)
+        ->whereDate('date','>=', Carbon::today())
         ->get();
 
         $slotsShopId = [];
