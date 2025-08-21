@@ -169,9 +169,16 @@ class OwnerController extends Controller
         $area = Area::firstOrCreate(['area' => $request->area]);
         $genre = Genre::firstOrCreate(['genre' => $request->genre]);
 
-        $existingImage = str_replace('storage/', '', $shop->image);
-
+        $updateData = [
+            'area_id' => $area->id,
+            'genre_id' => $genre->id,
+            'name' => $request->name,
+            'overview' => $request->overview,
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
+        ];
         if ($request->hasFile('image')) {
+            $existingImage = str_replace('storage/', '', $shop->image);
             if ($shop->image && Storage::disk('public')->exists($existingImage)) {
                 Storage::disk('public')->delete($existingImage);
             }
@@ -185,16 +192,10 @@ class OwnerController extends Controller
                 $i++;
             }
             $path = $image->storeAs('images', $fileName, 'public');
+            $updateData['image'] = 'storage/images/' . $fileName;
         }
-        $shop->update([
-            'area_id' => $area->id,
-            'genre_id' => $genre->id,
-            'name' => $request->name,
-            'image' => 'storage/images/' . $fileName,
-            'overview' => $request->overview,
-            'start_time' => $request->start_time,
-            'end_time' => $request->end_time,
-        ]);
+        $shop->update($updateData);
+
         return redirect('/owner')->with('success', '店舗情報を変更しました');
     }
 

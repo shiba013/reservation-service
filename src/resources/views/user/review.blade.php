@@ -14,7 +14,7 @@
 @endif
 <div class="review">
     <div class="back">
-        <a href="javascript:history.back()" class="back__link">
+        <a href="/detail/{{ $shop->id }}" class="back__link">
             <p class="back__btn">＜</p>
         </a>
         <h2 class="title">{{ $shop->name }}の口コミ一覧</h2>

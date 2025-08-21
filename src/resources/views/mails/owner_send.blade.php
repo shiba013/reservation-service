@@ -7,7 +7,7 @@
 @section('content')
 <div class="mail">
     <div class="back">
-        <a href="javascript:history.back()" class="back__link">
+        <a href="/owner" class="back__link">
             <p class="back__btn">＜</p>
         </a>
         <h2 class="title">配信メール作成</h2>

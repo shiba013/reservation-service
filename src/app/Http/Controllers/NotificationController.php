@@ -42,11 +42,11 @@ class NotificationController extends Controller
 
         switch ($sendTo) {
             case 'favorites':
-                $favoriteIds = Favorite::where('shop_id', $shopId)->get();
+                $favoriteIds = Favorite::where('shop_id', $shopId)->pluck('user_id');
                 $users = User::whereIn('id', $favoriteIds)->get();
                 break;
             case 'reviewer':
-                $reviewerIds = Review::where('shop_id', $shopId)->get();
+                $reviewerIds = Review::where('shop_id', $shopId)->pluck('user_id');
                 $users = User::whereIn('id', $reviewerIds)->get();
                 break;
             case 'admin':

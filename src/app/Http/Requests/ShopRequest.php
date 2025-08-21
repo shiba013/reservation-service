@@ -23,15 +23,21 @@ class ShopRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name' => 'required |max:191',
-            'image' => 'required |mimes:png,jpeg',
             'area' => 'required |max:100',
             'genre' => 'required |max:100',
             'overview' => 'required |max:500',
             'start_time' => 'required |before:end_time',
             'end_time' => 'required |after:start_time',
         ];
+
+        if ($this->isMethod('post')) {
+            $rules['image'] = 'required |mimes:jpeg,png';
+        } else {
+            $rules['image'] = 'nullable |mimes:jpeg,png';
+        }
+        return $rules;
     }
 
     public function messages()

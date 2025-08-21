@@ -7,7 +7,7 @@
 @section('content')
 <div class="detail">
     <div class="back">
-        <a href="javascript:history.back()" class="back__link">
+        <a href="/admin" class="back__link">
             <p class="back__btn">＜</p>
         </a>
         <h2 class="title">店舗詳細情報</h2>

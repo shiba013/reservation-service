@@ -46,7 +46,7 @@
                     <a href="/owner/login" class="menu__link">ログイン</a>
                     @elseif (session('login_type') === 'admin')
                     <a href="/" class="menu__link">ホーム</a>
-                    <a href="/admin/register" class="menu__link">新規店舗代表者登録</a>
+                    <a href="/admin/register" class="menu__link">店舗代表者登録</a>
                     <a href="/admin/shop" class="menu__link">店舗一覧</a>
                     <a href="/admin/mail" class="menu__link">メール配信</a>
                     <a href="/admin/login" class="menu__link">ログイン</a>
