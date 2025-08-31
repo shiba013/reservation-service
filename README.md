@@ -238,3 +238,8 @@ password: admin1234
 1. 日付を入力
 2. 時間を入力
 3. 人数を入力
+
+> リマインドメールを送信する際は、以下コマンドを実行してください。
+``` bash
+php artisan reminder:send
+```
